@@ -41,9 +41,14 @@ fun SplashScreen(navController: NavController) {
         )
         delay(1200)
 
-        // Check if Notification Listener permission is granted
+        val hasSelectedLanguage = com.scamshield.app.util.LocaleHelper.isLanguageSelected(context)
         val isPermissionGranted = isNotificationServiceEnabled(context)
-        if (isPermissionGranted) {
+
+        if (!hasSelectedLanguage) {
+            navController.navigate(Screen.LanguageSelection.route) {
+                popUpTo(Screen.Splash.route) { inclusive = true }
+            }
+        } else if (isPermissionGranted) {
             navController.navigate(Screen.Dashboard.route) {
                 popUpTo(Screen.Splash.route) { inclusive = true }
             }

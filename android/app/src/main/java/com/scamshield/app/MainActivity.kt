@@ -11,6 +11,10 @@ import com.scamshield.app.ui.theme.SCAMSHIELDTheme
 
 class MainActivity : ComponentActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(com.scamshield.app.util.LocaleHelper.applyLanguage(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

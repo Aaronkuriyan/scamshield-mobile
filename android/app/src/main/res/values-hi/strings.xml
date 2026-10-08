@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">SCAMSHIELD</string>
+    <string name="app_tagline">धोखाधड़ी वाले संदेशों से AI-संचालित मोबाइल सुरक्षा।</string>
+    <string name="notification_listener_service_label">SCAMSHIELD संदेश रक्षक</string>
+
+    <!-- Language Selection -->
+    <string name="choose_language_title">अपनी भाषा चुनें</string>
+    <string name="choose_language_subtitle">SCAMSHIELD के लिए अपनी पसंदीदा भाषा चुनें।</string>
+    <string name="lang_en">English</string>
+    <string name="lang_kn">ಕನ್ನಡ (Kannada)</string>
+    <string name="lang_hi">हिन्दी (Hindi)</string>
+    <string name="btn_continue">आगे बढ़ें</string>
+
+    <!-- Onboarding & Permissions -->
+    <string name="onboarding_title">स्वचालित स्कैम सुरक्षा</string>
+    <string name="onboarding_subtitle">धोखाधड़ी, बैंक स्कैम और खतरनाक लिंक से आपकी सुरक्षा।</string>
+    <string name="onboarding_auto_title">स्वचालित सुरक्षा</string>
+    <string name="onboarding_auto_desc">संदेश को कॉपी या पेस्ट करने की आवश्यकता नहीं है। खतरनाक संदेश आते ही SCAMSHIELD आपको सचेत करता है।</string>
+    <string name="onboarding_privacy_title">गोपनीयता पहले</string>
+    <string name="onboarding_privacy_desc">आपके सामान्य पारिवारिक संदेश आपके फोन पर ही रहते हैं। केवल संदिग्ध संदेशों की ही जांच की जाती है।</string>
+    <string name="onboarding_clear_title">सरल और स्पष्ट चेतावनी</string>
+    <string name="onboarding_clear_desc">कोई जटिल तकनीकी शब्द नहीं। हम साफ कहते हैं: लिंक पर क्लिक न करें और अपना OTP साझा न करें।</string>
+    <string name="btn_get_started">शुरू करें</string>
+    <string name="permission_title">अनुमति सेटअप</string>
+    <string name="permission_desc">संदेशों को कॉपी-पेस्ट किए बिना स्वचालित रूप से सुरक्षा प्रदान करने के लिए, SCAMSHIELD को नोटिफिकेशन एक्सेस की आवश्यकता है।</string>
+    <string name="btn_enable_protection">सुरक्षा चालू करें</string>
+    <string name="btn_continue_to_app">SCAMSHIELD में जाएं</string>
+
+    <!-- Dashboard & Message Protection Inbox -->
+    <string name="status_protected">सुरक्षा सक्रिय है</string>
+    <string name="status_protected_sub">आप स्वचालित रूप से सुरक्षित हैं।</string>
+    <string name="status_action_required">सुरक्षा रुकी हुई है</string>
+    <string name="status_action_required_sub">नोटिफिकेशन अनुमति देने के लिए टैप करें।</string>
+
+    <string name="inbox_heading">संदेश सुरक्षा इनबॉक्स</string>
+    <string name="tab_all">सभी</string>
+    <string name="tab_high_risk">उच्च जोखिम</string>
+    <string name="tab_suspicious">संदिग्ध</string>
+    <string name="tab_safe">सुरक्षित</string>
+
+    <string name="risk_high">उच्च जोखिम</string>
+    <string name="risk_suspicious">संदिग्ध</string>
+    <string name="risk_safe">सुरक्षित</string>
+    <string name="risk_score_label">जोखिम</string>
+
+    <string name="empty_inbox_title">अभी तक कोई संदेश जाँचा नहीं गया है</string>
+    <string name="empty_inbox_desc">सुरक्षा चालू होने पर SCAMSHIELD आने वाले संदेशों की अपने आप जांच करेगा।</string>
+    <string name="empty_threats_title">आप सुरक्षित हैं</string>
+    <string name="empty_threats_desc">कोई संदिग्ध या धोखाधड़ी वाला संदेश नहीं मिला।</string>
+
+    <!-- Message Details & Analysis -->
+    <string name="details_title">विस्तृत खतरा विश्लेषण</string>
+    <string name="section_message">संदेश सामग्री</string>
+    <string name="section_why_flagged">हमने इसे संदिग्ध क्यों माना</string>
+    <string name="section_what_to_do">आपको क्या करना चाहिए</string>
+    <string name="section_what_not_to_do">आपको क्या नहीं करना चाहिए</string>
+    <string name="safe_summary">इस संदेश में कोई महत्वपूर्ण खतरा नहीं मिला।</string>
+    <string name="safe_action">आप सामान्य रूप से बातचीत जारी रख सकते हैं।</string>
+    <string name="btn_back">वापस</string>
+    <string name="btn_call_helpline">साइबर हेल्पलाइन पर कॉल करें (1930)</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="setting_language">ऐप भाषा</string>
+    <string name="setting_language_desc">भाषा बदलें (English, ಕನ್ನಡ, हिन्दी)</string>
+    <string name="setting_voice_alert">आवाज चेतावनी (Text-to-Speech)</string>
+    <string name="setting_voice_alert_desc">उच्च जोखिम वाले स्कैम का पता चलने पर चेतावनी पढ़कर सुनाएं।</string>
+    <string name="setting_privacy_title">गोपनीयता विवरण</string>
+    <string name="setting_privacy_desc">SCAMSHIELD संदिग्ध संदेशों की पहचान के लिए एंड्रॉइड नोटिफिकेशन का उपयोग करता है। व्यक्तिगत संदेश सुरक्षित और निजी रहते हैं।</string>
+    <string name="setting_backend_url">बैकएंड सर्वर URL</string>
+    <string name="setting_clear_history">सभी संदेश इतिहास मिटाएं</string>
+    <string name="btn_simulate_demo">लाइव डेमो टेस्ट करें</string>
+    <string name="btn_safety_guide">बुजुर्गों के लिए सुरक्षा निर्देश</string>
+</resources>

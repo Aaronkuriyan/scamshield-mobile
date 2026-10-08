@@ -21,6 +21,8 @@ data class AnalyzeResponse(
     @SerializedName("category") val category: String,
     @SerializedName("confidence") val confidence: Float,
     @SerializedName("indicators") val indicators: List<String> = emptyList(),
+    @SerializedName("what_to_do") val whatToDo: List<String> = emptyList(),
+    @SerializedName("what_not_to_do") val whatNotToDo: List<String> = emptyList(),
     @SerializedName("recommendation") val recommendation: String,
     @SerializedName("is_safe") val isSafe: Boolean,
     @SerializedName("analyzed_at") val analyzedAt: String,

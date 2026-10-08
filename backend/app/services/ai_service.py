@@ -19,6 +19,8 @@ The JSON must adhere to this exact schema:
   "category": "<one of: OTP & Credential Phishing, Banking Scam, UPI Scam, Payment Fraud, Phishing, Fake KYC, Government Impersonation, Lottery / Prize Scam, Investment Scam, Job Scam, Delivery Scam, Fake Customer Support, Account Suspension Scam, Remote Access Scam, Identity Theft, Malicious Link, Social Engineering, Safe / Normal, Other>",
   "confidence": <float between 0.0 and 1.0>,
   "indicators": ["<concise threat indicator 1>", "<concise threat indicator 2>"],
+  "what_to_do": ["<action 1 user should take>", "<action 2 user should take>"],
+  "what_not_to_do": ["<action 1 user must NOT do>", "<action 2 user must NOT do>"],
   "recommendation": "<short, clear, actionable elderly-friendly guidance starting with Do NOT...>"
 }
 
@@ -84,6 +86,8 @@ class AIService:
                     "category": parsed.get("category", local_result["category"]),
                     "confidence": float(parsed.get("confidence", 0.90)),
                     "indicators": parsed.get("indicators", local_result["indicators"]),
+                    "what_to_do": parsed.get("what_to_do", local_result.get("what_to_do", [])),
+                    "what_not_to_do": parsed.get("what_not_to_do", local_result.get("what_not_to_do", [])),
                     "recommendation": parsed.get("recommendation", local_result["recommendation"]),
                     "is_safe": risk_score <= settings.SAFE_MAX_SCORE,
                     "engine": "groq_ai"

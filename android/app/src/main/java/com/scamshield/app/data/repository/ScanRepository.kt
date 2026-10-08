@@ -50,6 +50,8 @@ class ScanRepository(private val context: Context) {
         var finalCategory = localResult.category
         var finalIndicators = localResult.indicators
         var finalRecommendation = localResult.recommendation
+        var finalWhatToDo = localResult.whatToDo
+        var finalWhatNotToDo = localResult.whatNotToDo
         var usedEngine = "local_heuristic"
 
         // Step 2: If message has suspicious indicators, query backend for deeper AI analysis
@@ -71,6 +73,8 @@ class ScanRepository(private val context: Context) {
                     finalCategory = body.category
                     finalIndicators = body.indicators
                     finalRecommendation = body.recommendation
+                    if (body.whatToDo.isNotEmpty()) finalWhatToDo = body.whatToDo
+                    if (body.whatNotToDo.isNotEmpty()) finalWhatNotToDo = body.whatNotToDo
                     usedEngine = body.engine
                 } else {
                     Log.w("ScanRepo", "Backend returned error ${response.code()}, falling back to local filter.")
@@ -82,15 +86,26 @@ class ScanRepository(private val context: Context) {
             }
         }
 
-        // Step 3: Privacy-preserving record creation
+        // Ensure what_to_do and what_not_to_do are never empty
+        if (finalWhatToDo.isEmpty()) {
+            finalWhatToDo = LocalScamFilter.generateWhatToDo(finalCategory, finalClassification)
+        }
+        if (finalWhatNotToDo.isEmpty()) {
+            finalWhatNotToDo = LocalScamFilter.generateWhatNotToDo(finalCategory, finalClassification)
+        }
+
+        // Step 3: Record creation (stores on-device snippet for the safe messaging inbox display)
         val record = ScanRecordEntity(
             timestamp = System.currentTimeMillis(),
             sourcePackage = packageName,
             senderTitle = sender,
+            messageSnippet = content.trim().take(300),
             riskScore = finalScore,
             classification = finalClassification,
             category = finalCategory,
             indicatorsCsv = finalIndicators.joinToString(" • "),
+            whatToDoCsv = finalWhatToDo.joinToString(" | "),
+            whatNotToDoCsv = finalWhatNotToDo.joinToString(" | "),
             recommendation = finalRecommendation,
             engine = usedEngine,
             isThreat = finalScore >= 70,

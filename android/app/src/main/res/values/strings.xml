@@ -1,48 +1,74 @@
 <resources>
     <string name="app_name">SCAMSHIELD</string>
-    <string name="app_tagline">AI-powered protection against scam messages.</string>
+    <string name="app_tagline">AI-powered mobile protection against scam messages.</string>
     <string name="notification_listener_service_label">SCAMSHIELD Message Guard</string>
+
+    <!-- Language Selection -->
+    <string name="choose_language_title">Choose your language</string>
+    <string name="choose_language_subtitle">Select your preferred language for SCAMSHIELD.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_kn">ಕನ್ನಡ (Kannada)</string>
+    <string name="lang_hi">हिन्दी (Hindi)</string>
+    <string name="btn_continue">CONTINUE</string>
 
     <!-- Onboarding & Permissions -->
     <string name="onboarding_title">Automatic Scam Protection</string>
-    <string name="onboarding_desc">SCAMSHIELD watches incoming message notifications and alerts you immediately if a message attempts to steal your money, OTP, or identity.</string>
-    <string name="onboarding_privacy_note">Privacy First: Normal conversations like family greetings are never uploaded. Only suspicious signals undergo deep verification.</string>
-    <string name="btn_enable_protection">Enable Protection</string>
-    <string name="permission_title">Allow Notification Access</string>
-    <string name="permission_desc">To protect you automatically without requiring you to copy and paste messages, SCAMSHIELD needs permission to inspect incoming message notifications.</string>
+    <string name="onboarding_subtitle">Your quiet guardian against fraud, bank scams, and malicious links.</string>
+    <string name="onboarding_auto_title">Automatic Protection</string>
+    <string name="onboarding_auto_desc">No copying or pasting required. SCAMSHIELD alerts you the moment a dangerous message arrives.</string>
+    <string name="onboarding_privacy_title">Privacy by Default</string>
+    <string name="onboarding_privacy_desc">Normal family messages and daily conversations stay on your phone. Only suspicious signals are checked.</string>
+    <string name="onboarding_clear_title">Simple, Clear Warnings</string>
+    <string name="onboarding_clear_desc">No confusing technical terms. We tell you plainly: Do not click the link, and do not share your OTP.</string>
+    <string name="btn_get_started">GET STARTED</string>
+    <string name="permission_title">Permission Setup</string>
+    <string name="permission_desc">To protect you automatically without requiring you to copy and paste messages, SCAMSHIELD needs notification access.</string>
+    <string name="btn_enable_protection">ENABLE PROTECTION</string>
+    <string name="btn_continue_to_app">CONTINUE TO SCAMSHIELD</string>
 
-    <!-- Dashboard -->
+    <!-- Dashboard & Message Protection Inbox -->
     <string name="status_protected">PROTECTION ACTIVE</string>
-    <string name="status_protected_sub">You are protected from scam messages.</string>
-    <string name="status_action_required">ACTION REQUIRED</string>
-    <string name="status_action_required_sub">Tap here to enable notification protection.</string>
-    <string name="stat_checked">Messages Checked</string>
-    <string name="stat_threats">Threats Blocked</string>
-    <string name="btn_recent_threats">View Threat History</string>
-    <string name="btn_safety_guide">Safety Guide</string>
-    <string name="btn_simulate_demo">Test Live Demo Alert</string>
+    <string name="status_protected_sub">You are protected automatically.</string>
+    <string name="status_action_required">PROTECTION PAUSED</string>
+    <string name="status_action_required_sub">Tap to grant notification access.</string>
 
-    <!-- Threat Warnings (Elderly-First) -->
-    <string name="warning_banner_scam">⚠️ POSSIBLE SCAM DETECTED</string>
-    <string name="warning_banner_suspicious">⚠️ CAUTION: SUSPICIOUS MESSAGE</string>
-    <string name="warning_safe">SAFE MESSAGE</string>
-    <string name="warning_advice_title">What you should do:</string>
-    <string name="rule_no_click">Do NOT click any link.</string>
-    <string name="rule_no_otp">Do NOT share your OTP or PIN.</string>
-    <string name="rule_no_money">Do NOT send money.</string>
-    <string name="rule_verify">Verify directly through your bank or official service.</string>
+    <string name="inbox_heading">Message Protection Inbox</string>
+    <string name="tab_all">All</string>
+    <string name="tab_high_risk">High Risk</string>
+    <string name="tab_suspicious">Suspicious</string>
+    <string name="tab_safe">Safe</string>
 
-    <!-- Navigation -->
-    <string name="nav_home">Home</string>
-    <string name="nav_history">History</string>
-    <string name="nav_safety">Safety</string>
-    <string name="nav_settings">Settings</string>
+    <string name="risk_high">HIGH RISK</string>
+    <string name="risk_suspicious">SUSPICIOUS</string>
+    <string name="risk_safe">SAFE</string>
+    <string name="risk_score_label">Risk</string>
+
+    <string name="empty_inbox_title">No messages analyzed yet</string>
+    <string name="empty_inbox_desc">SCAMSHIELD will automatically check supported incoming notifications when protection is enabled.</string>
+    <string name="empty_threats_title">You\'re Protected</string>
+    <string name="empty_threats_desc">No suspicious or scam messages detected.</string>
+
+    <!-- Message Details & Analysis -->
+    <string name="details_title">Detailed Threat Analysis</string>
+    <string name="section_message">MESSAGE CONTENT</string>
+    <string name="section_why_flagged">WHY WE FLAGGED THIS</string>
+    <string name="section_what_to_do">WHAT YOU SHOULD DO</string>
+    <string name="section_what_not_to_do">WHAT YOU SHOULD NOT DO</string>
+    <string name="safe_summary">No significant scam indicators were detected.</string>
+    <string name="safe_action">You can continue normally.</string>
+    <string name="btn_back">BACK</string>
+    <string name="btn_call_helpline">Call Cyber Helpline (1930)</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
-    <string name="setting_voice_alert">Voice Warning (Text-to-Speech)</string>
+    <string name="setting_language">App Language</string>
+    <string name="setting_language_desc">Change language (English, ಕನ್ನಡ, हिन्दी)</string>
+    <string name="setting_voice_alert">Voice Warnings (Text-to-Speech)</string>
     <string name="setting_voice_alert_desc">Speak aloud warning alerts when a high-risk scam is detected.</string>
+    <string name="setting_privacy_title">Privacy Statement</string>
+    <string name="setting_privacy_desc">SCAMSHIELD uses Android-supported notification access to identify suspicious messages. We minimize data collection and only send information for deeper analysis when required.</string>
     <string name="setting_backend_url">Backend API Server</string>
-    <string name="setting_clear_history">Clear Scan History</string>
-    <string name="setting_family_protection">Family Protection (Optional)</string>
+    <string name="setting_clear_history">Clear All Message History</string>
+    <string name="btn_simulate_demo">SIMULATE LIVE DEMO TEST</string>
+    <string name="btn_safety_guide">Safety Guide for Elderly</string>
 </resources>

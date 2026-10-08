@@ -14,16 +14,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.data.network.NetworkClient
 import com.scamshield.app.data.repository.ScanRepository
 import com.scamshield.app.service.ScamNotificationListenerService
 import com.scamshield.app.service.TextToSpeechHelper
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
+import com.scamshield.app.util.LocaleHelper
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,17 +35,20 @@ fun SettingsScreen(navController: NavController) {
     val repository = remember { ScanRepository(context) }
     val scope = rememberCoroutineScope()
 
-    var isProtectionActive by remember {
-        mutableStateOf(ScamNotificationListenerService.isProtectionActive(context))
-    }
-    var isVoiceAlertsEnabled by remember {
-        mutableStateOf(TextToSpeechHelper.isVoiceAlertEnabled(context))
-    }
+    var isProtectionActive by remember { mutableStateOf(ScamNotificationListenerService.isProtectionActive(context)) }
+    var isVoiceAlertsEnabled by remember { mutableStateOf(TextToSpeechHelper.isVoiceAlertEnabled(context)) }
+    var currentLanguage by remember { mutableStateOf(LocaleHelper.getLanguage(context)) }
 
-    var baseUrl by remember { mutableStateOf(NetworkClient.getBaseUrl(context)) }
-    var showUrlDialog by remember { mutableStateOf(false) }
-    var tempUrl by remember { mutableStateOf(baseUrl) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
     var showClearConfirm by remember { mutableStateOf(false) }
+    var showEditUrlDialog by remember { mutableStateOf(false) }
+    var baseUrl by remember { mutableStateOf(NetworkClient.getBaseUrl(context)) }
+
+    val languages = listOf(
+        Triple("en", "English", "🇬🇧"),
+        Triple("kn", "ಕನ್ನಡ (Kannada)", "🇮🇳"),
+        Triple("hi", "हिन्दी (Hindi)", "🇮🇳")
+    )
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -54,28 +60,78 @@ fun SettingsScreen(navController: NavController) {
                 .padding(20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // Header
+            // Header Bar
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = TextWhite)
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.btn_back),
+                        tint = TextWhite
+                    )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Settings",
+                    text = stringResource(R.string.settings_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextWhite
                 )
             }
 
-            // Protection Controls Section
+            // Section 1: Language Preference
             Text(
-                text = "PROTECTION",
+                text = "LANGUAGE",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = AccentEmerald,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showLanguageDialog = true }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = stringResource(R.string.setting_language),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextWhite
+                        )
+                        Spacer(modifier = Modifier.height(3.dp))
+                        val currentLabel = languages.firstOrNull { it.first == currentLanguage }?.second ?: "English"
+                        Text(
+                            text = currentLabel,
+                            fontSize = 14.sp,
+                            color = AccentEmerald,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Section 2: Real-time Protection
+            Text(
+                text = "REAL-TIME PROTECTION",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -96,14 +152,14 @@ fun SettingsScreen(navController: NavController) {
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "Active Shield Monitoring",
+                                text = "Active Message Monitoring",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = TextWhite
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = "Automatically scans incoming notifications",
+                                text = "Automatically checks incoming message notifications",
                                 fontSize = 13.sp,
                                 color = TextMuted
                             )
@@ -153,9 +209,9 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Accessibility & Voice Warnings
+            // Section 3: Audio & Voice Warnings
             Text(
-                text = "ACCESSIBILITY & AUDIO",
+                text = "AUDIO & ACCESSIBILITY",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -177,14 +233,14 @@ fun SettingsScreen(navController: NavController) {
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Voice Warnings (Text-to-Speech)",
+                            text = stringResource(R.string.setting_voice_alert),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = TextWhite
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "Reads alerts aloud for elderly safety",
+                            text = stringResource(R.string.setting_voice_alert_desc),
                             fontSize = 13.sp,
                             color = TextMuted
                         )
@@ -205,9 +261,9 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Family Protection Section
+            // Section 4: Privacy Statement
             Text(
-                text = "FAMILY SAFETY",
+                text = "PRIVACY & SECURITY",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -218,40 +274,39 @@ fun SettingsScreen(navController: NavController) {
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardNavy),
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { navController.navigate(Screen.FamilyProtection.route) }
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = AccentEmerald,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "Family Protection (Opt-In)",
+                            text = stringResource(R.string.setting_privacy_title),
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontWeight = FontWeight.Bold,
                             color = TextWhite
                         )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = "Notify trusted contacts when high threat is flagged",
-                            fontSize = 13.sp,
-                            color = TextMuted
-                        )
                     }
-                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.setting_privacy_desc),
+                        fontSize = 13.sp,
+                        color = TextWhite.copy(alpha = 0.85f),
+                        lineHeight = 20.sp
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Developer & Server Configuration
+            // Section 5: Data & Reset
             Text(
-                text = "SERVER & DATA",
+                text = "DATA MANAGEMENT",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -268,16 +323,13 @@ fun SettingsScreen(navController: NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                tempUrl = baseUrl
-                                showUrlDialog = true
-                            },
+                            .clickable { showEditUrlDialog = true },
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "Backend API Server",
+                                text = stringResource(R.string.setting_backend_url),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = TextWhite
@@ -302,7 +354,7 @@ fun SettingsScreen(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Clear All Scan History",
+                            text = stringResource(R.string.setting_clear_history),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = AlertCrimson
@@ -319,32 +371,137 @@ fun SettingsScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "SCAMSHIELD Mobile v1.0.0", fontSize = 14.sp, color = TextMuted)
-                Text(text = "Privacy First Architecture", fontSize = 12.sp, color = TextMuted.copy(alpha = 0.7f))
+                Text(
+                    text = "SCAMSHIELD Mobile v1.0",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextWhite
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.app_tagline),
+                    fontSize = 12.sp,
+                    color = TextMuted
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        // Base URL Dialog
-        if (showUrlDialog) {
+        // Language Switcher Dialog
+        if (showLanguageDialog) {
             AlertDialog(
-                onDismissRequest = { showUrlDialog = false },
+                onDismissRequest = { showLanguageDialog = false },
                 containerColor = CardNavy,
-                title = { Text("Configure Backend Host", color = TextWhite, fontWeight = FontWeight.Bold) },
+                titleContentColor = TextWhite,
+                textContentColor = TextWhite,
+                title = {
+                    Text(
+                        text = stringResource(R.string.choose_language_title),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        languages.forEach { (code, label, flag) ->
+                            val isSelected = currentLanguage == code
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        currentLanguage = code
+                                        LocaleHelper.setLanguage(context, code)
+                                        showLanguageDialog = false
+                                    },
+                                colors = CardDefaults.cardColors(
+                                    containerColor = if (isSelected) AccentEmeraldDark.copy(alpha = 0.5f) else SurfaceDark
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(14.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "$flag  $label",
+                                        fontSize = 16.sp,
+                                        color = if (isSelected) AccentEmerald else TextWhite,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                    if (isSelected) {
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = null,
+                                            tint = AccentEmerald,
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showLanguageDialog = false }) {
+                        Text("CLOSE", color = AccentEmerald, fontWeight = FontWeight.Bold)
+                    }
+                }
+            )
+        }
+
+        // Clear History Confirmation Dialog
+        if (showClearConfirm) {
+            AlertDialog(
+                onDismissRequest = { showClearConfirm = false },
+                containerColor = CardNavy,
+                titleContentColor = AlertCrimson,
+                textContentColor = TextWhite,
+                title = { Text("Clear All Scan History?") },
+                text = { Text("This will permanently remove all analyzed message logs from local storage.") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            scope.launch {
+                                repository.clearHistory()
+                                showClearConfirm = false
+                            }
+                        }
+                    ) {
+                        Text("CLEAR", color = AlertCrimson, fontWeight = FontWeight.Bold)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showClearConfirm = false }) {
+                        Text("CANCEL", color = TextMuted)
+                    }
+                }
+            )
+        }
+
+        // Edit API URL Dialog
+        if (showEditUrlDialog) {
+            var tempUrl by remember { mutableStateOf(baseUrl) }
+            AlertDialog(
+                onDismissRequest = { showEditUrlDialog = false },
+                containerColor = CardNavy,
+                titleContentColor = TextWhite,
+                textContentColor = TextWhite,
+                title = { Text("Backend Server URL") },
                 text = {
                     Column {
-                        Text(
-                            "Use http://10.0.2.2:8000 for Android emulator or http://YOUR_PC_IP:8000 for physical device:",
-                            color = TextMuted,
-                            fontSize = 13.sp
-                        )
+                        Text("Set the IP/URL of your running FastAPI service:", fontSize = 13.sp, color = TextMuted)
                         Spacer(modifier = Modifier.height(10.dp))
                         OutlinedTextField(
                             value = tempUrl,
                             onValueChange = { tempUrl = it },
                             singleLine = true,
                             colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = AccentEmerald,
+                                unfocusedBorderColor = CardNavyBorder,
                                 focusedTextColor = TextWhite,
                                 unfocusedTextColor = TextWhite
                             )
@@ -352,42 +509,19 @@ fun SettingsScreen(navController: NavController) {
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = {
-                        baseUrl = tempUrl
-                        NetworkClient.setBaseUrl(context, tempUrl)
-                        showUrlDialog = false
-                    }) {
+                    TextButton(
+                        onClick = {
+                            NetworkClient.setBaseUrl(context, tempUrl)
+                            baseUrl = tempUrl
+                            showEditUrlDialog = false
+                        }
+                    ) {
                         Text("SAVE", color = AccentEmerald, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showUrlDialog = false }) {
-                        Text("CANCEL", color = TextWhite)
-                    }
-                }
-            )
-        }
-
-        // Clear History Confirm Dialog
-        if (showClearConfirm) {
-            AlertDialog(
-                onDismissRequest = { showClearConfirm = false },
-                containerColor = CardNavy,
-                title = { Text("Clear All Scan Records?", color = TextWhite, fontWeight = FontWeight.Bold) },
-                text = { Text("This will permanently remove past scan history from this device.", color = TextMuted) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        scope.launch {
-                            repository.clearHistory()
-                            showClearConfirm = false
-                        }
-                    }) {
-                        Text("CONFIRM CLEAR", color = AlertCrimson, fontWeight = FontWeight.Bold)
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showClearConfirm = false }) {
-                        Text("CANCEL", color = TextWhite)
+                    TextButton(onClick = { showEditUrlDialog = false }) {
+                        Text("CANCEL", color = TextMuted)
                     }
                 }
             )

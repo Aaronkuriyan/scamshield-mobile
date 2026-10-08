@@ -15,7 +15,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
 
@@ -43,46 +45,46 @@ fun OnboardingScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Welcome to\nSCAMSHIELD",
-                    fontSize = 32.sp,
+                    text = stringResource(R.string.onboarding_title),
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextWhite,
-                    lineHeight = 38.sp
+                    lineHeight = 36.sp
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Your quiet guardian against fraud, bank scams, and malicious links.",
-                    fontSize = 18.sp,
+                    text = stringResource(R.string.onboarding_subtitle),
+                    fontSize = 17.sp,
                     color = TextMuted,
-                    lineHeight = 26.sp
+                    lineHeight = 25.sp
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
 
                 OnboardingFeatureItem(
                     icon = Icons.Default.Notifications,
-                    title = "Automatic Protection",
-                    description = "No copying or pasting required. SCAMSHIELD alerts you the moment a dangerous message arrives."
+                    title = stringResource(R.string.onboarding_auto_title),
+                    description = stringResource(R.string.onboarding_auto_desc)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 OnboardingFeatureItem(
                     icon = Icons.Default.Lock,
-                    title = "Privacy by Default",
-                    description = "Normal family messages and daily conversations stay on your phone. Only suspicious signals are checked."
+                    title = stringResource(R.string.onboarding_privacy_title),
+                    description = stringResource(R.string.onboarding_privacy_desc)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 OnboardingFeatureItem(
                     icon = Icons.Default.CheckCircle,
-                    title = "Simple, Clear Warnings",
-                    description = "No confusing technical terms. We tell you plainly: Do not click the link, and do not share your OTP."
+                    title = stringResource(R.string.onboarding_clear_title),
+                    description = stringResource(R.string.onboarding_clear_desc)
                 )
             }
 
-            Column(modifier = Modifier.padding(top = 32.dp)) {
+            Column(modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)) {
                 Button(
                     onClick = { navController.navigate(Screen.Permission.route) },
                     modifier = Modifier
@@ -92,10 +94,11 @@ fun OnboardingScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
                 ) {
                     Text(
-                        text = "GET STARTED",
-                        fontSize = 18.sp,
+                        text = stringResource(R.string.btn_get_started),
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SurfaceDark
+                        color = SurfaceDark,
+                        letterSpacing = 1.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))

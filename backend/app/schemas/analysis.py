@@ -41,6 +41,8 @@ class AnalyzeResponse(BaseModel):
     category: str = Field(..., description="Specific threat category")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
     indicators: List[str] = Field(default_factory=list, description="Specific threat signals detected")
+    what_to_do: List[str] = Field(default_factory=list, description="Actionable safety actions to take")
+    what_not_to_do: List[str] = Field(default_factory=list, description="Actions the user should avoid")
     recommendation: str = Field(..., description="Actionable plain-language instruction for user")
     is_safe: bool = Field(..., description="Convenience flag: True if risk_score < 35")
     analyzed_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())

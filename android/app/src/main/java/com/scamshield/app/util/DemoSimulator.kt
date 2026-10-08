@@ -18,46 +18,39 @@ object DemoSimulator {
 
     val PRELOADED_TEST_CASES = listOf(
         TestCase(
-            title = "Bank Account Block & OTP Phishing",
+            title = "Test 1: Safe Normal Chat",
+            sender = "Priya",
+            packageName = "com.whatsapp",
+            content = "Hey, are we meeting at 5 PM?",
+            expectedType = "SAFE"
+        ),
+        TestCase(
+            title = "Test 2: Suspicious Delivery Payment",
+            sender = "SPEED-POST",
+            packageName = "com.google.android.apps.messaging",
+            content = "Your delivery failed. Pay ₹50 using this link to reschedule: http://track-parcel-redeliver.in",
+            expectedType = "SUSPICIOUS"
+        ),
+        TestCase(
+            title = "Test 3: High Risk Bank Account KYC Phishing",
             sender = "SBI-ALERT",
             packageName = "com.google.android.apps.messaging",
-            content = "Dear Customer, your SBI bank account is blocked today. Click http://bit.ly/sbi-unblock immediately and send your OTP to verify KYC.",
-            expectedType = "HIGH RISK SCAM"
+            content = "Your bank account will be blocked today. Verify your KYC immediately using this link: http://sbi-kyc-update.net",
+            expectedType = "HIGH RISK"
         ),
         TestCase(
-            title = "Electricity Power Disconnection",
-            sender = "BESCOM-BILL",
-            packageName = "com.google.android.apps.messaging",
-            content = "Dear Consumer, your electricity power will be disconnected tonight at 9:30 PM due to unpaid bill. Immediately call electricity officer at 9876543210.",
-            expectedType = "HIGH RISK SCAM"
-        ),
-        TestCase(
-            title = "Google Pay UPI PIN Fraud",
-            sender = "+91 9988776655",
-            packageName = "com.whatsapp",
-            content = "Approve collect request of Rs 5000 on PhonePe or enter UPI PIN to receive your cashback reward now.",
-            expectedType = "HIGH RISK SCAM"
-        ),
-        TestCase(
-            title = "KBC Lottery Lucky Draw",
-            sender = "+91 9123456789",
-            packageName = "com.whatsapp",
-            content = "Congratulations! You won Rs 25,00,000 in KBC Lucky Draw. Pay Rs 5,000 processing fee to claim your prize immediately.",
-            expectedType = "HIGH RISK SCAM"
-        ),
-        TestCase(
-            title = "Legitimate Bank Advisory (No Alert)",
+            title = "Test 4: Legitimate Bank Advisory (Never Share OTP)",
             sender = "HDFC-BANK",
             packageName = "com.google.android.apps.messaging",
-            content = "Dear Customer, never share your OTP, PIN or password with anyone. HDFC Bank never asks for confidential codes.",
-            expectedType = "SAFE ADVISORY"
+            content = "Never share your bank OTP with anyone. Bank officials will never ask for it.",
+            expectedType = "SAFE (NO FALSE POSITIVE)"
         ),
         TestCase(
-            title = "Normal Family Conversation (No Alert)",
-            sender = "Granddaughter Ananya",
+            title = "Test 5: UPI Collect / PIN Scam",
+            sender = "+91 9876543210",
             packageName = "com.whatsapp",
-            content = "Hey Grandpa! Just reached home. Did you have your evening tea? Call me later!",
-            expectedType = "SAFE CHAT"
+            content = "Approve collect request of ₹5,000 on PhonePe or enter UPI PIN to receive lottery cash reward.",
+            expectedType = "HIGH RISK"
         )
     )
 

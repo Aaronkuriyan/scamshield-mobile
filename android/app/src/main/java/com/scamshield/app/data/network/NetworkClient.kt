@@ -1,6 +1,7 @@
 package com.scamshield.app.data.network
 
 import android.content.Context
+import android.os.Build
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,16 +12,30 @@ object NetworkClient {
 
     private const val PREFS_NAME = "scamshield_prefs"
     private const val KEY_BASE_URL = "backend_base_url"
-    // Default 10.0.2.2 points to host machine from Android Emulator.
-    // Can be changed in Settings to http://192.168.x.x:8000 for physical phone testing.
+
+    private fun isEmulator(): Boolean {
+        return (Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
+                || "google_sdk" == Build.PRODUCT)
+    }
+
+    fun getDefaultBaseUrl(): String {
+        return if (isEmulator()) "http://10.0.2.2:8000/" else "http://127.0.0.1:8000/"
+    }
+
     const val DEFAULT_BASE_URL = "http://10.0.2.2:8000/"
 
-    private var currentBaseUrl: String = DEFAULT_BASE_URL
+    private var currentBaseUrl: String? = null
     private var apiServiceInstance: ScamShieldApiService? = null
 
     fun getBaseUrl(context: Context): String {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_BASE_URL, DEFAULT_BASE_URL) ?: DEFAULT_BASE_URL
+        return prefs.getString(KEY_BASE_URL, null) ?: getDefaultBaseUrl()
     }
 
     fun setBaseUrl(context: Context, newUrl: String) {
@@ -51,7 +66,7 @@ object NetworkClient {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(currentBaseUrl)
+            .baseUrl(configuredUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -7,6 +7,8 @@ data class LocalEvaluationResult(
     val classification: String,
     val category: String,
     val indicators: List<String>,
+    val whatToDo: List<String>,
+    val whatNotToDo: List<String>,
     val recommendation: String,
     val shouldQueryBackend: Boolean,
     val isSafe: Boolean
@@ -152,6 +154,8 @@ object LocalScamFilter {
                 classification = "SAFE",
                 category = "Safe / Normal",
                 indicators = emptyList(),
+                whatToDo = listOf("No special action required."),
+                whatNotToDo = emptyList(),
                 recommendation = "No threat detected.",
                 shouldQueryBackend = false,
                 isSafe = true
@@ -231,6 +235,9 @@ object LocalScamFilter {
             else -> if (finalScore >= 35) "Be cautious. Verify the sender through official channels before acting." else "This message appears normal."
         }
 
+        val whatToDo = generateWhatToDo(primaryCategory, classification)
+        val whatNotToDo = generateWhatNotToDo(primaryCategory, classification)
+
         // Privacy principle: only messages with non-zero risk or suspicious indicators are sent for AI analysis
         val shouldQueryBackend = finalScore >= 35
 
@@ -239,9 +246,112 @@ object LocalScamFilter {
             classification = classification,
             category = primaryCategory,
             indicators = matchedIndicators,
+            whatToDo = whatToDo,
+            whatNotToDo = whatNotToDo,
             recommendation = recommendation,
             shouldQueryBackend = shouldQueryBackend,
             isSafe = finalScore < 35
         )
+    }
+
+    fun generateWhatToDo(category: String, classification: String): List<String> {
+        if (classification == "SAFE") {
+            return listOf(
+                "You can continue normally without concern.",
+                "No special action is required."
+            )
+        }
+        return when (category) {
+            "OTP & Credential Phishing" -> listOf(
+                "Keep your OTP confidential; it is strictly private.",
+                "Call your bank customer care immediately if you accidentally shared it.",
+                "Block and report the sender."
+            )
+            "UPI Scam" -> listOf(
+                "Decline or ignore the collect request immediately.",
+                "Check your bank balance independently using your bank app.",
+                "Report to 1930 Cyber Helpline or cybercrime.gov.in."
+            )
+            "Account Suspension Scam", "Fake KYC" -> listOf(
+                "Contact your bank branch using the official number on your passbook/card.",
+                "Visit your nearest official branch directly for KYC inquiries.",
+                "Ask a trusted family member before taking any action."
+            )
+            "Government Impersonation" -> listOf(
+                "Call the official electricity or municipal helpline in your district.",
+                "Pay bills only through authorized counters or official portals.",
+                "Report impersonation texts to local authorities."
+            )
+            "Lottery / Prize Scam" -> listOf(
+                "Immediately delete and ignore this message.",
+                "Block the sender's phone number.",
+                "Remember: If you did not enter a contest, you cannot win a prize."
+            )
+            "Delivery Scam" -> listOf(
+                "Track packages directly inside your official shopping app (Amazon, Flipkart).",
+                "Contact the official courier helpline if in doubt.",
+                "Ignore tracking links sent via unsolicited SMS."
+            )
+            "Remote Access Scam" -> listOf(
+                "Hang up the call immediately.",
+                "Disconnect your phone from the internet if you suspect an app was installed.",
+                "Ask a knowledgeable family member or technician to check your phone."
+            )
+            else -> listOf(
+                "Verify the sender through official public channels.",
+                "Ask a trusted family member or call 1930 before taking any action.",
+                "Report the suspicious message."
+            )
+        }
+    }
+
+    fun generateWhatNotToDo(category: String, classification: String): List<String> {
+        if (classification == "SAFE") {
+            return listOf(
+                "Never share passwords or OTPs with strangers even in normal conversations."
+            )
+        }
+        return when (category) {
+            "OTP & Credential Phishing" -> listOf(
+                "Do NOT share your OTP, PIN, or CVV with anyone under any circumstances.",
+                "Do NOT read out verification codes over phone calls.",
+                "Do NOT forward this message."
+            )
+            "UPI Scam" -> listOf(
+                "Do NOT enter your UPI PIN to receive money.",
+                "Do NOT scan unknown QR codes.",
+                "Do NOT approve collect requests on PhonePe, GPay, or Paytm."
+            )
+            "Account Suspension Scam", "Fake KYC" -> listOf(
+                "Do NOT click any web link in this message.",
+                "Do NOT enter your netbanking password or card details.",
+                "Do NOT call phone numbers printed in the SMS."
+            )
+            "Government Impersonation" -> listOf(
+                "Do NOT pay electricity bills through private UPI handles.",
+                "Do NOT panic or believe urgent disconnection threats over SMS.",
+                "Do NOT call personal numbers mentioned in the message."
+            )
+            "Lottery / Prize Scam" -> listOf(
+                "Do NOT pay any registration, customs, or processing fee.",
+                "Do NOT share bank account or card details to claim prizes.",
+                "Do NOT transfer funds to unknown individuals."
+            )
+            "Delivery Scam" -> listOf(
+                "Do NOT click links to reschedule your delivery.",
+                "Do NOT pay ₹5 or ₹10 re-delivery fees through unknown links.",
+                "Do NOT provide card details on delivery forms."
+            )
+            "Remote Access Scam" -> listOf(
+                "Do NOT install AnyDesk, TeamViewer, RustDesk, or QuickSupport.",
+                "Do NOT share the 9-digit code displayed on screen-sharing apps.",
+                "Do NOT open banking apps during unknown phone calls."
+            )
+            else -> listOf(
+                "Do NOT click suspicious links in this message.",
+                "Do NOT share your OTP, password, or banking credentials.",
+                "Do NOT send money or approve payment requests."
+            )
+        }
     }
 }

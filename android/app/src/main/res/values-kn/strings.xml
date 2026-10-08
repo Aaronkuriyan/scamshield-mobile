@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">SCAMSHIELD</string>
+    <string name="app_tagline">ವಂಚನೆ ಸಂದೇಶಗಳ ವಿರುದ್ಧ AI-ಆಧಾರಿತ ಮೊಬೈಲ್ ರಕ್ಷಣೆ.</string>
+    <string name="notification_listener_service_label">SCAMSHIELD ಸಂದೇಶ ಕಾವಲುಗಾರ</string>
+
+    <!-- Language Selection -->
+    <string name="choose_language_title">ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="choose_language_subtitle">SCAMSHIELD ಗಾಗಿ ನಿಮ್ಮ ಆದ್ಯತೆಯ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_kn">ಕನ್ನಡ (Kannada)</string>
+    <string name="lang_hi">हिन्दी (Hindi)</string>
+    <string name="btn_continue">ಮುಂದುವರಿಸಿ</string>
+
+    <!-- Onboarding & Permissions -->
+    <string name="onboarding_title">ಸ್ವಯಂಚಾಲಿತ ವಂಚನೆ ರಕ್ಷಣೆ</string>
+    <string name="onboarding_subtitle">ವಂಚನೆ, ಬ್ಯಾಂಕ್ ಸ್ಕ್ಯಾಮ್ ಮತ್ತು ಅಪಾಯಕಾರಿ ಲಿಂಕ್‌ಗಳ ವಿರುದ್ಧ ನಿಮ್ಮ ರಕ್ಷಕ.</string>
+    <string name="onboarding_auto_title">ಸ್ವಯಂಚಾಲಿತ ರಕ್ಷಣೆ</string>
+    <string name="onboarding_auto_desc">ಸಂದೇಶವನ್ನು ಕಾಪಿ ಅಥವಾ ಪೇಸ್ಟ್ ಮಾಡುವ ಅಗತ್ಯವಿಲ್ಲ. ಅಪಾಯಕಾರಿ ಸಂದೇಶ ಬಂದ ತಕ್ಷಣ SCAMSHIELD ಎಚ್ಚರಿಸುತ್ತದೆ.</string>
+    <string name="onboarding_privacy_title">ಗೌಪ್ಯತೆ ಮೊದಲು</string>
+    <string name="onboarding_privacy_desc">ನಿಮ್ಮ ಸಾಮಾನ್ಯ ಕೌಟುಂಬಿಕ ಸಂದೇಶಗಳು ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತವೆ. ಕೇವಲ ಸಂಶಯಾಸ್ಪದ ಸಂದೇಶಗಳನ್ನು ಮಾತ್ರ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="onboarding_clear_title">ಸರಳ, ಸ್ಪಷ್ಟ ಎಚ್ಚರಿಕೆಗಳು</string>
+    <string name="onboarding_clear_desc">ಯಾವುದೇ ಗೊಂದಲಮಯ ತಾಂತ್ರಿಕ ಪದಗಳಿಲ್ಲ. ಲಿಂಕ್ ಕ್ಲಿಕ್ ಮಾಡಬೇಡಿ ಮತ್ತು OTP ಹಂಚಿಕೊಳ್ಳಬೇಡಿ ಎಂದು ನೇರವಾಗಿ ಹೇಳುತ್ತೇವೆ.</string>
+    <string name="btn_get_started">ಪ್ರಾರಂಭಿಸಿ</string>
+    <string name="permission_title">ಅನುಮತಿ ಸೆಟಪ್</string>
+    <string name="permission_desc">ಸಂದೇಶಗಳನ್ನು ಕಾಪಿ-ಪೇಸ್ಟ್ ಮಾಡದೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಕ್ಷಿಸಲು, SCAMSHIELD ಗೆ ನೋಟಿಫಿಕೇಶನ್ ಪ್ರವೇಶ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="btn_enable_protection">ರಕ್ಷಣೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
+    <string name="btn_continue_to_app">SCAMSHIELD ಗೆ ಮುಂದುವರಿಯಿರಿ</string>
+
+    <!-- Dashboard & Message Protection Inbox -->
+    <string name="status_protected">ರಕ್ಷಣೆ ಸಕ್ರಿಯವಾಗಿದೆ</string>
+    <string name="status_protected_sub">ನೀವು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸುರಕ್ಷಿತವಾಗಿದ್ದೀರಿ.</string>
+    <string name="status_action_required">ರಕ್ಷಣೆ ವಿರಾಮದಲ್ಲಿದೆ</string>
+    <string name="status_action_required_sub">ನೋಟಿಫಿಕೇಶನ್ ಅನುಮತಿ ನೀಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+
+    <string name="inbox_heading">ಸಂದೇಶ ರಕ್ಷಣೆ ಇನ್‌ಬಾಕ್ಸ್</string>
+    <string name="tab_all">ಎಲ್ಲವೂ</string>
+    <string name="tab_high_risk">ಹೆಚ್ಚಿನ ಅಪಾಯ</string>
+    <string name="tab_suspicious">ಸಂಶಯಾಸ್ಪದ</string>
+    <string name="tab_safe">ಸುರಕ್ಷಿತ</string>
+
+    <string name="risk_high">ಹೆಚ್ಚಿನ ಅಪಾಯ</string>
+    <string name="risk_suspicious">ಸಂಶಯಾಸ್ಪದ</string>
+    <string name="risk_safe">ಸುರಕ್ಷಿತ</string>
+    <string name="risk_score_label">ಅಪಾಯ</string>
+
+    <string name="empty_inbox_title">ಇನ್ನೂ ಯಾವುದೇ ಸಂದೇಶಗಳನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗಿಲ್ಲ</string>
+    <string name="empty_inbox_desc">ರಕ್ಷಣೆ ಆನ್ ಆಗಿರುವಾಗ ಬರುವ ಸಂದೇಶ ನೋಟಿಫಿಕೇಶನ್‌ಗಳನ್ನು SCAMSHIELD ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪರಿಶೀಲಿಸುತ್ತದೆ.</string>
+    <string name="empty_threats_title">ನೀವು ಸುರಕ್ಷಿತವಾಗಿದ್ದೀರಿ</string>
+    <string name="empty_threats_desc">ಯಾವುದೇ ಸಂಶಯಾಸ್ಪದ ಅಥವಾ ವಂಚನೆಯ ಸಂದೇಶಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
+
+    <!-- Message Details & Analysis -->
+    <string name="details_title">ವಿವರವಾದ ಅಪಾಯ ವಿಶ್ಲೇಷಣೆ</string>
+    <string name="section_message">ಸಂದೇಶದ ವಿಷಯ</string>
+    <string name="section_why_flagged">ನಾವು ಇದನ್ನು ಏಕೆ ಗುರುತಿಸಿದ್ದೇವೆ</string>
+    <string name="section_what_to_do">ನೀವು ಏನು ಮಾಡಬೇಕು</string>
+    <string name="section_what_not_to_do">ನೀವು ಏನು ಮಾಡಬಾರದು</string>
+    <string name="safe_summary">ಯಾವುದೇ ಗಮನಾರ್ಹ ವಂಚನೆ ಲಕ್ಷಣಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
+    <string name="safe_action">ನೀವು ಸಾಮಾನ್ಯವಾಗಿ ಮುಂದುವರಿಯಬಹುದು.</string>
+    <string name="btn_back">ಹಿಂದೆ</string>
+    <string name="btn_call_helpline">ಸೈಬರ್ ಸಹಾಯವಾಣಿಗೆ ಕರೆ ಮಾಡಿ (1930)</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="setting_language">ಅಪ್ಲಿಕೇಶನ್ ಭಾಷೆ</string>
+    <string name="setting_language_desc">ಭಾಷೆಯನ್ನು ಬದಲಾಯಿಸಿ (English, ಕನ್ನಡ, हिन्दी)</string>
+    <string name="setting_voice_alert">ಧ್ವನಿ ಎಚ್ಚರಿಕೆ (Text-to-Speech)</string>
+    <string name="setting_voice_alert_desc">ಹೆಚ್ಚಿನ ಅಪಾಯದ ವಂಚನೆ ಪತ್ತೆಯಾದಾಗ ಗಟ್ಟಿಯಾಗಿ ಎಚ್ಚರಿಕೆ ಸೂಚನೆಗಳನ್ನು ಓದಿ ಹೇಳಿ.</string>
+    <string name="setting_privacy_title">ಗೌಪ್ಯತೆ ಹೇಳಿಕೆ</string>
+    <string name="setting_privacy_desc">SCAMSHIELD ಸಂಶಯಾಸ್ಪದ ಸಂದೇಶಗಳನ್ನು ಗುರುತಿಸಲು ಆಂಡ್ರಾಯ್ಡ್ ಬೆಂಬಲಿತ ನೋಟಿಫಿಕೇಶನ್ ಪ್ರವೇಶವನ್ನು ಬಳಸುತ್ತದೆ. ಸಾಮಾನ್ಯ ಸಂದೇಶಗಳು ಖಾಸಗಿಯಾಗಿ ಉಳಿಯುತ್ತವೆ.</string>
+    <string name="setting_backend_url">ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್ URL</string>
+    <string name="setting_clear_history">ಎಲ್ಲಾ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
+    <string name="btn_simulate_demo">ಲೈವ್ ಡೆಮೊ ಪರೀಕ್ಷಿಸಿ</string>
+    <string name="btn_safety_guide">ಹಿರಿಯರಿಗಾಗಿ ಸುರಕ್ಷತಾ ಮಾರ್ಗದರ್ಶಿ</string>
+</resources>

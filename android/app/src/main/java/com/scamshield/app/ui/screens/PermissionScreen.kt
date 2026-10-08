@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
 
@@ -70,14 +72,14 @@ fun PermissionScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Permission Setup",
+                    text = stringResource(R.string.permission_title),
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextWhite
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "To protect you automatically without requiring you to copy and paste messages, SCAMSHIELD needs notification access.",
+                    text = stringResource(R.string.permission_desc),
                     fontSize = 17.sp,
                     color = TextMuted,
                     lineHeight = 25.sp
@@ -130,7 +132,7 @@ fun PermissionScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
                 ) {
                     Text(
-                        text = "ENABLE PROTECTION",
+                        text = stringResource(R.string.btn_enable_protection),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = SurfaceDark
@@ -153,7 +155,7 @@ fun PermissionScreen(navController: NavController) {
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMuted)
                 ) {
                     Text(
-                        text = "Explore App First",
+                        text = stringResource(R.string.btn_continue_to_app),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
                     )

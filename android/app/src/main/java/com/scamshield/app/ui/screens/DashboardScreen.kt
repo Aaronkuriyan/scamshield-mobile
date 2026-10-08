@@ -1,14 +1,17 @@
 package com.scamshield.app.ui.screens
 
+import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -17,18 +20,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.data.local.ScanRecordEntity
 import com.scamshield.app.data.repository.ScanRepository
 import com.scamshield.app.service.ScamNotificationListenerService
 import com.scamshield.app.service.TextToSpeechHelper
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
+import com.scamshield.app.util.AppFormatters
 import com.scamshield.app.util.DemoSimulator
 import kotlinx.coroutines.launch
+
+enum class InboxFilter {
+    ALL,
+    HIGH_RISK,
+    SUSPICIOUS,
+    SAFE
+}
 
 @Composable
 fun DashboardScreen(navController: NavController) {
@@ -37,13 +51,43 @@ fun DashboardScreen(navController: NavController) {
     val scope = rememberCoroutineScope()
     val ttsHelper = remember { TextToSpeechHelper(context) }
 
-    val totalScans by repository.totalScansCount.collectAsState(initial = 0)
-    val totalThreats by repository.threatsCount.collectAsState(initial = 0)
-    val recentThreat by repository.recentThreat.collectAsState(initial = null)
+    val allScans by repository.allScans.collectAsState(initial = emptyList())
+    var selectedFilter by remember { mutableStateOf(InboxFilter.ALL) }
+    var showDemoDialog by remember { mutableStateOf(false) }
 
     var isPermissionActive by remember { mutableStateOf(isNotificationServiceEnabled(context)) }
-    var isProtectionOn by remember { mutableStateOf(ScamNotificationListenerService.isProtectionActive(context)) }
-    var showDemoDialog by remember { mutableStateOf(false) }
+    val isProtectionOn by remember { mutableStateOf(ScamNotificationListenerService.isProtectionActive(context)) }
+    val isFullyActive = isPermissionActive && isProtectionOn
+
+    // Re-check permission on composition and auto-seed initial scenarios
+    LaunchedEffect(Unit) {
+        isPermissionActive = isNotificationServiceEnabled(context)
+        val prefs = context.getSharedPreferences("scamshield_prefs", Context.MODE_PRIVATE)
+        val hasSeeded = prefs.getBoolean("has_seeded_initial_scans_v2", false)
+        if (!hasSeeded) {
+            prefs.edit().putBoolean("has_seeded_initial_scans_v2", true).apply()
+            DemoSimulator.PRELOADED_TEST_CASES.forEach { testCase ->
+                repository.processIncomingNotification(
+                    content = testCase.content,
+                    sender = testCase.sender,
+                    packageName = testCase.packageName
+                )
+            }
+        }
+    }
+
+    val highRiskList = remember(allScans) { allScans.filter { it.riskScore >= 70 } }
+    val suspiciousList = remember(allScans) { allScans.filter { it.riskScore in 35..69 } }
+    val safeList = remember(allScans) { allScans.filter { it.riskScore < 35 } }
+
+    val displayedList = remember(allScans, selectedFilter) {
+        when (selectedFilter) {
+            InboxFilter.ALL -> allScans
+            InboxFilter.HIGH_RISK -> highRiskList
+            InboxFilter.SUSPICIOUS -> suspiciousList
+            InboxFilter.SAFE -> safeList
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -52,199 +96,252 @@ fun DashboardScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 18.dp)
         ) {
-            // App Bar / Header
+            // App Bar
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 20.dp),
+                    .padding(top = 16.dp, bottom = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = null,
-                        tint = AccentEmerald,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "SCAMSHIELD",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextWhite,
-                        letterSpacing = 1.sp
-                    )
-                }
-
-                IconButton(
-                    onClick = { navController.navigate(Screen.Settings.route) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = TextWhite,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
-
-            // Central Protection Status Card
-            val isFullyActive = isPermissionActive && isProtectionOn
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isFullyActive) AccentEmeraldDark.copy(alpha = 0.5f) else CautionAmberDark.copy(alpha = 0.5f)
-                ),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        if (!isPermissionActive) {
-                            context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                        }
-                    }
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
                     Box(
                         modifier = Modifier
-                            .size(76.dp)
-                            .background(
-                                color = if (isFullyActive) AccentEmerald else CautionAmber,
-                                shape = CircleShape
-                            ),
+                            .size(38.dp)
+                            .background(AccentEmeraldDark.copy(alpha = 0.4f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = if (isFullyActive) Icons.Default.CheckCircle else Icons.Default.Warning,
+                            imageVector = Icons.Default.Lock,
                             contentDescription = null,
-                            tint = SurfaceDark,
-                            modifier = Modifier.size(44.dp)
+                            tint = AccentEmerald,
+                            modifier = Modifier.size(22.dp)
                         )
                     }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = "SCAMSHIELD",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = TextWhite,
+                            letterSpacing = 1.sp
+                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .background(if (isFullyActive) AccentEmerald else CautionAmber, CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = if (isFullyActive) stringResource(R.string.status_protected) else stringResource(R.string.status_action_required),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (isFullyActive) AccentEmerald else CautionAmber
+                            )
+                        }
+                    }
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Row {
+                    IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.settings_title),
+                            tint = TextWhite,
+                            modifier = Modifier.size(26.dp)
+                        )
+                    }
+                }
+            }
 
-                    Text(
-                        text = if (isFullyActive) "PROTECTION ACTIVE" else "PERMISSION NEEDED",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (isFullyActive) AccentEmerald else CautionAmber,
-                        letterSpacing = 1.sp
+            // Protection Status Action Banner (If permission disabled)
+            if (!isFullyActive) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                        .clickable {
+                            context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                        },
+                    colors = CardDefaults.cardColors(containerColor = CautionAmberDark.copy(alpha = 0.5f)),
+                    border = BorderStroke(1.dp, CautionAmber),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = null,
+                            tint = CautionAmber,
+                            modifier = Modifier.size(32.dp)
+                        )
+                        Spacer(modifier = Modifier.width(14.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.status_action_required),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = CautionAmber
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = stringResource(R.string.status_action_required_sub),
+                                fontSize = 13.sp,
+                                color = TextWhite
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = CautionAmber
+                        )
+                    }
+                }
+            }
+
+            // Inbox Filter Segmented Tabs
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilterTabItem(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.tab_all),
+                    count = allScans.size,
+                    isSelected = selectedFilter == InboxFilter.ALL,
+                    badgeColor = AccentEmerald,
+                    onClick = { selectedFilter = InboxFilter.ALL }
+                )
+                FilterTabItem(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.tab_high_risk),
+                    count = highRiskList.size,
+                    isSelected = selectedFilter == InboxFilter.HIGH_RISK,
+                    badgeColor = AlertCrimson,
+                    onClick = { selectedFilter = InboxFilter.HIGH_RISK }
+                )
+                FilterTabItem(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.tab_suspicious),
+                    count = suspiciousList.size,
+                    isSelected = selectedFilter == InboxFilter.SUSPICIOUS,
+                    badgeColor = CautionAmber,
+                    onClick = { selectedFilter = InboxFilter.SUSPICIOUS }
+                )
+                FilterTabItem(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.tab_safe),
+                    count = safeList.size,
+                    isSelected = selectedFilter == InboxFilter.SAFE,
+                    badgeColor = AccentEmerald,
+                    onClick = { selectedFilter = InboxFilter.SAFE }
+                )
+            }
+
+            // Live Simulator & Quick Actions Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.inbox_heading),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextWhite
+                )
+
+                TextButton(
+                    onClick = { showDemoDialog = true },
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = null,
+                        tint = AccentEmerald,
+                        modifier = Modifier.size(16.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (isFullyActive) "You are protected automatically." else "Tap to grant notification access.",
-                        fontSize = 16.sp,
-                        color = TextWhite
+                        text = stringResource(R.string.btn_simulate_demo),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AccentEmerald
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Metrics Cards Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                StatCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Checked",
-                    count = totalScans.toString(),
-                    icon = Icons.Default.CheckCircle,
-                    color = AccentEmerald
-                )
-                StatCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Threats Blocked",
-                    count = totalThreats.toString(),
-                    icon = Icons.Default.Warning,
-                    color = if (totalThreats > 0) AlertCrimson else TextMuted
-                )
-            }
-
-            // Recent Threat Card (if any exists)
-            recentThreat?.let { threat ->
-                Spacer(modifier = Modifier.height(20.dp))
-                RecentThreatCard(
-                    threat = threat,
-                    onClick = {
-                        navController.navigate(Screen.ThreatDetail.createRoute(threat.id))
+            // Message Cards List
+            if (displayedList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(24.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .background(CardNavy, CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = if (allScans.isEmpty()) Icons.Default.Notifications else Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = AccentEmerald,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = if (allScans.isEmpty()) stringResource(R.string.empty_inbox_title) else stringResource(R.string.empty_threats_title),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = TextWhite
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = if (allScans.isEmpty()) stringResource(R.string.empty_inbox_desc) else stringResource(R.string.empty_threats_desc),
+                            fontSize = 14.sp,
+                            color = TextMuted,
+                            lineHeight = 20.sp
+                        )
                     }
-                )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(displayedList, key = { it.id }) { message ->
+                        MessageItemCard(
+                            message = message,
+                            onClick = {
+                                navController.navigate(Screen.ThreatDetail.createRoute(message.id))
+                            }
+                        )
+                    }
+                }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Primary Navigation Buttons (Large touch targets for elderly accessibility)
-            Button(
-                onClick = { navController.navigate(Screen.History.route) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = CardNavy)
-            ) {
-                Icon(Icons.Default.Refresh, contentDescription = null, tint = AccentEmerald)
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "VIEW THREAT HISTORY",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextWhite
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-                onClick = { navController.navigate(Screen.SafetyGuide.route) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = CardNavy)
-            ) {
-                Icon(Icons.Default.Info, contentDescription = null, tint = AccentEmerald)
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "SAFETY GUIDE FOR ELDERLY",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextWhite
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Live Hackathon Demo Simulator Button
-            OutlinedButton(
-                onClick = { showDemoDialog = true },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentEmerald)
-            ) {
-                Icon(Icons.Default.ArrowForward, contentDescription = null, tint = AccentEmerald)
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "SIMULATE LIVE DEMO TEST",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
 
         // Demo Simulator Modal Dialog
@@ -256,25 +353,24 @@ fun DashboardScreen(navController: NavController) {
                 textContentColor = TextWhite,
                 title = {
                     Text(
-                        text = "Live Hackathon Test Cases",
+                        text = "Live Mentor Test Scenarios",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 text = {
                     Column(
-                        modifier = Modifier.verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Text(
-                            text = "Choose a scenario to simulate automatic detection, alert notification, and voice warning:",
+                            text = "Tap a scenario to test automatic notification detection without copy-pasting:",
                             fontSize = 14.sp,
                             color = TextMuted
                         )
                         DemoSimulator.PRELOADED_TEST_CASES.forEach { testCase ->
                             Card(
                                 colors = CardDefaults.cardColors(containerColor = SurfaceDark),
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
@@ -287,7 +383,8 @@ fun DashboardScreen(navController: NavController) {
                                 Column(modifier = Modifier.padding(12.dp)) {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
                                             text = testCase.title,
@@ -295,11 +392,16 @@ fun DashboardScreen(navController: NavController) {
                                             fontWeight = FontWeight.Bold,
                                             color = TextWhite
                                         )
+                                        val badgeColor = when {
+                                            testCase.expectedType.contains("HIGH", ignoreCase = true) -> AlertCrimson
+                                            testCase.expectedType.contains("SUSPICIOUS", ignoreCase = true) -> CautionAmber
+                                            else -> AccentEmerald
+                                        }
                                         Text(
                                             text = testCase.expectedType,
-                                            fontSize = 12.sp,
-                                            color = if (testCase.expectedType.contains("HIGH")) AlertCrimson else AccentEmerald,
-                                            fontWeight = FontWeight.SemiBold
+                                            fontSize = 11.sp,
+                                            color = badgeColor,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(4.dp))
@@ -307,7 +409,8 @@ fun DashboardScreen(navController: NavController) {
                                         text = testCase.content,
                                         fontSize = 13.sp,
                                         color = TextMuted,
-                                        maxLines = 2
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -325,44 +428,154 @@ fun DashboardScreen(navController: NavController) {
 }
 
 @Composable
-fun StatCard(
+fun FilterTabItem(
     modifier: Modifier = Modifier,
     title: String,
-    count: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    color: Color
+    count: Int,
+    isSelected: Boolean,
+    badgeColor: Color,
+    onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = CardNavy),
-        shape = RoundedCornerShape(16.dp)
+        modifier = modifier.clickable { onClick() },
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) CardNavyBorder else CardNavy
+        ),
+        border = if (isSelected) BorderStroke(1.5.dp, badgeColor) else null,
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(28.dp))
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = count, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = TextWhite)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = title, fontSize = 14.sp, color = TextMuted)
+            Text(
+                text = count.toString(),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) badgeColor else TextWhite
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = title,
+                fontSize = 11.sp,
+                color = if (isSelected) TextWhite else TextMuted,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                maxLines = 1
+            )
         }
     }
 }
 
 @Composable
-fun RecentThreatCard(
-    threat: ScanRecordEntity,
+fun MessageItemCard(
+    message: ScanRecordEntity,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
+    val isHighRisk = message.riskScore >= 70
+    val isSuspicious = message.riskScore in 35..69
+    val isSafe = message.riskScore < 35
+
+    val themeColor = when {
+        isHighRisk -> AlertCrimson
+        isSuspicious -> CautionAmber
+        else -> AccentEmerald
+    }
+
+    val containerBg = when {
+        isHighRisk -> AlertCrimsonDark.copy(alpha = 0.5f)
+        isSuspicious -> CautionAmberDark.copy(alpha = 0.35f)
+        else -> CardNavy
+    }
+
+    val sourceApp = remember(message.sourcePackage) {
+        AppFormatters.getSourceAppName(context, message.sourcePackage)
+    }
+
+    val relativeTime = remember(message.timestamp) {
+        AppFormatters.formatRelativeTime(message.timestamp)
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = AlertCrimsonDark.copy(alpha = 0.6f)),
-        shape = RoundedCornerShape(16.dp)
+        colors = CardDefaults.cardColors(containerColor = containerBg),
+        border = BorderStroke(1.2.dp, themeColor.copy(alpha = 0.6f)),
+        shape = RoundedCornerShape(18.dp)
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
+            // Header Row: Risk Tag & Score Badge
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .background(themeColor, CircleShape)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = when {
+                            isHighRisk -> stringResource(R.string.risk_high)
+                            isSuspicious -> stringResource(R.string.risk_suspicious)
+                            else -> stringResource(R.string.risk_safe)
+                        },
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = themeColor,
+                        letterSpacing = 0.5.sp
+                    )
+                }
+
+                // Risk Score Tag
+                Surface(
+                    color = themeColor.copy(alpha = 0.2f),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = "${stringResource(R.string.risk_score_label)}: ${message.riskScore}%",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = themeColor,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Scam Category Title
+            Text(
+                text = message.category,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextWhite
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // Message Preview Snippet
+            val previewText = message.messageSnippet.ifBlank {
+                message.senderTitle
+            }
+            Text(
+                text = previewText,
+                fontSize = 14.sp,
+                color = TextWhite.copy(alpha = 0.85f),
+                lineHeight = 20.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Footer Row: Source App & Timestamp
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -370,54 +583,36 @@ fun RecentThreatCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Default.Warning,
+                        imageVector = if (sourceApp == "WhatsApp") Icons.Default.Phone else Icons.Default.Email,
                         contentDescription = null,
-                        tint = AlertCrimson,
-                        modifier = Modifier.size(24.dp)
+                        tint = TextMuted,
+                        modifier = Modifier.size(14.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "RECENT THREAT DETECTED",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = AlertCrimson
+                        text = "$sourceApp • $relativeTime",
+                        fontSize = 12.sp,
+                        color = TextMuted,
+                        fontWeight = FontWeight.Medium
                     )
                 }
 
-                Text(
-                    text = "${threat.riskScore}/100",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextWhite
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "VIEW ANALYSIS",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = themeColor
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = themeColor,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
             }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = threat.category,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextWhite
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = threat.recommendation,
-                fontSize = 14.sp,
-                color = TextWhite.copy(alpha = 0.9f),
-                maxLines = 2
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "TAP TO VIEW FULL SAFETY ADVICE →",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                color = AccentEmerald
-            )
         }
     }
 }

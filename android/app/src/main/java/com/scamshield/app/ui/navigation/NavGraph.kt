@@ -21,6 +21,9 @@ fun ScamShieldNavGraph(
         composable(Screen.Splash.route) {
             SplashScreen(navController = navController)
         }
+        composable(Screen.LanguageSelection.route) {
+            LanguageSelectionScreen(navController = navController)
+        }
         composable(Screen.Onboarding.route) {
             OnboardingScreen(navController = navController)
         }
