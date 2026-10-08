@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.scamshield.app.R
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
+import androidx.compose.ui.graphics.Color
 import com.scamshield.app.util.LocaleHelper
 
 @Composable
@@ -38,7 +39,7 @@ fun LanguageSelectionScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -63,7 +64,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                     text = stringResource(R.string.choose_language_title),
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite,
+                    color = AppTheme.colors.textPrimary,
                     lineHeight = 36.sp
                 )
 
@@ -72,7 +73,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                 Text(
                     text = stringResource(R.string.choose_language_subtitle),
                     fontSize = 17.sp,
-                    color = TextMuted,
+                    color = AppTheme.colors.textSecondary,
                     lineHeight = 24.sp
                 )
 
@@ -82,15 +83,21 @@ fun LanguageSelectionScreen(navController: NavController) {
                 languages.forEach { (code, label, flag) ->
                     val isSelected = selectedLanguage == code
 
+                    val cardContainerColor = if (isSelected) {
+                        if (AppTheme.colors.isDark) AccentEmeraldDark.copy(alpha = 0.45f) else AccentEmeraldLight
+                    } else {
+                        AppTheme.colors.surface
+                    }
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp)
                             .clickable { selectedLanguage = code },
                         colors = CardDefaults.cardColors(
-                            containerColor = if (isSelected) AccentEmeraldDark.copy(alpha = 0.45f) else CardNavy
+                            containerColor = cardContainerColor
                         ),
-                        border = if (isSelected) BorderStroke(2.dp, AccentEmerald) else BorderStroke(1.dp, CardNavyBorder),
+                        border = if (isSelected) BorderStroke(2.dp, AccentEmerald) else BorderStroke(1.dp, AppTheme.colors.border),
                         shape = RoundedCornerShape(18.dp)
                     ) {
                         Row(
@@ -110,7 +117,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                                     text = label,
                                     fontSize = 20.sp,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                    color = if (isSelected) AccentEmerald else TextWhite
+                                    color = if (isSelected) AccentEmerald else AppTheme.colors.textPrimary
                                 )
                             }
 
@@ -153,7 +160,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                         text = stringResource(R.string.btn_continue),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SurfaceDark,
+                        color = if (AppTheme.colors.isDark) SurfaceDark else Color(0xFF0F172A),
                         letterSpacing = 1.sp
                     )
                 }

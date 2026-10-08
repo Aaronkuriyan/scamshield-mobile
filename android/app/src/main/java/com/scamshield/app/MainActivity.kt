@@ -26,12 +26,37 @@ class MainActivity : ComponentActivity() {
             null
         }
 
+        com.scamshield.app.util.ThemeManager.init(this)
+
+        val themeModeExtra = intent?.getStringExtra("EXTRA_THEME_MODE")
+        if (themeModeExtra != null) {
+            try {
+                val mode = com.scamshield.app.util.AppThemeMode.valueOf(themeModeExtra.uppercase())
+                com.scamshield.app.util.ThemeManager.setThemeMode(this, mode)
+            } catch (_: Exception) {}
+        }
+
+        val navRouteExtra = intent?.getStringExtra("EXTRA_NAV_ROUTE")
+        val startDest = when {
+            threatId != null -> Screen.ThreatDetail.createRoute(threatId)
+            navRouteExtra == "dashboard" -> Screen.Dashboard.route
+            navRouteExtra == "settings" -> Screen.Settings.route
+            navRouteExtra == "splash" -> Screen.Splash.route
+            navRouteExtra == "onboarding" -> Screen.Onboarding.route
+            navRouteExtra == "language" -> Screen.LanguageSelection.route
+            navRouteExtra == "history" -> Screen.History.route
+            navRouteExtra == "safety" -> Screen.SafetyGuide.route
+            navRouteExtra == "protection" -> Screen.FamilyProtection.route
+            else -> Screen.Splash.route
+        }
+
         setContent {
-            SCAMSHIELDTheme {
+            val isDark = com.scamshield.app.util.ThemeManager.isDarkTheme()
+            SCAMSHIELDTheme(darkTheme = isDark) {
                 val navController = rememberNavController()
                 ScamShieldNavGraph(
                     navController = navController,
-                    startDestination = if (threatId != null) Screen.ThreatDetail.createRoute(threatId) else Screen.Splash.route
+                    startDestination = startDest
                 )
             }
         }
@@ -40,15 +65,39 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        // If app was already open in background and threat notification clicked
+
+        val themeModeExtra = intent.getStringExtra("EXTRA_THEME_MODE")
+        if (themeModeExtra != null) {
+            try {
+                val mode = com.scamshield.app.util.AppThemeMode.valueOf(themeModeExtra.uppercase())
+                com.scamshield.app.util.ThemeManager.setThemeMode(this, mode)
+            } catch (_: Exception) {}
+        }
+
         val threatId = intent.getLongExtra("EXTRA_THREAT_ID", -1L)
-        if (threatId != -1L) {
+        val navRouteExtra = intent.getStringExtra("EXTRA_NAV_ROUTE")
+        val startDest = when {
+            threatId != -1L -> Screen.ThreatDetail.createRoute(threatId)
+            navRouteExtra == "dashboard" -> Screen.Dashboard.route
+            navRouteExtra == "settings" -> Screen.Settings.route
+            navRouteExtra == "splash" -> Screen.Splash.route
+            navRouteExtra == "onboarding" -> Screen.Onboarding.route
+            navRouteExtra == "language" -> Screen.LanguageSelection.route
+            navRouteExtra == "history" -> Screen.History.route
+            navRouteExtra == "safety" -> Screen.SafetyGuide.route
+            navRouteExtra == "protection" -> Screen.FamilyProtection.route
+            else -> null
+        }
+
+        if (startDest != null || themeModeExtra != null) {
             setContent {
-                SCAMSHIELDTheme {
+                val isDark = com.scamshield.app.util.ThemeManager.isDarkTheme()
+                SCAMSHIELDTheme(darkTheme = isDark) {
                     val navController = rememberNavController()
                     ScamShieldNavGraph(
                         navController = navController,
-                        initialThreatId = threatId
+                        startDestination = startDest ?: Screen.Dashboard.route,
+                        initialThreatId = if (threatId != -1L) threatId else null
                     )
                 }
             }

@@ -71,4 +71,19 @@
     <string name="setting_clear_history">सभी संदेश इतिहास मिटाएं</string>
     <string name="btn_simulate_demo">लाइव डेमो टेस्ट करें</string>
     <string name="btn_safety_guide">बुजुर्गों के लिए सुरक्षा निर्देश</string>
+
+    <!-- Appearance & Theme -->
+    <string name="setting_appearance">स्वरूप (APPEARANCE)</string>
+    <string name="theme_title">थीम</string>
+    <string name="theme_system">सिस्टम डिफ़ॉल्ट</string>
+    <string name="theme_light">लाइट मोड (Light)</string>
+    <string name="theme_dark">डार्क मोड (Dark)</string>
+    <string name="about_scamshield_title">SCAMSHIELD के बारे में</string>
+    <string name="about_scamshield_desc">SCAMSHIELD संदिग्ध धोखाधड़ी संदेशों की पहचान करने में मदद करता है और क्या करें और क्या न करें पर स्पष्ट मार्गदर्शन प्रदान करता है।</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">होम</string>
+    <string name="nav_protection">सुरक्षा</string>
+    <string name="nav_safety">निर्देश</string>
+    <string name="nav_settings">सेटिंग्स</string>
 </resources>

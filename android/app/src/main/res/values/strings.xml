@@ -71,4 +71,19 @@
     <string name="setting_clear_history">Clear All Message History</string>
     <string name="btn_simulate_demo">SIMULATE LIVE DEMO TEST</string>
     <string name="btn_safety_guide">Safety Guide for Elderly</string>
+
+    <!-- Appearance & Theme -->
+    <string name="setting_appearance">APPEARANCE</string>
+    <string name="theme_title">Theme</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="about_scamshield_title">About SCAMSHIELD</string>
+    <string name="about_scamshield_desc">SCAMSHIELD helps identify potentially fraudulent messages and provides clear guidance on what to do and what to avoid.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_protection">Protection</string>
+    <string name="nav_safety">Safety</string>
+    <string name="nav_settings">Settings</string>
 </resources>

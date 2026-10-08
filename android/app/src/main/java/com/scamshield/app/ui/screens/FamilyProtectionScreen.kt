@@ -36,7 +36,7 @@ fun FamilyProtectionScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -52,19 +52,20 @@ fun FamilyProtectionScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = TextWhite)
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = AppTheme.colors.textPrimary)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Family Protection",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
             }
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(18.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -81,7 +82,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                             text = "Protect Your Parents",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                     }
 
@@ -90,7 +91,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                     Text(
                         text = "When an elderly parent receives a confirmed high-risk scam or fraudulent payment demand, SCAMSHIELD can notify a designated family member so they can intervene before money is lost.",
                         fontSize = 15.sp,
-                        color = TextMuted,
+                        color = AppTheme.colors.textSecondary,
                         lineHeight = 22.sp
                     )
 
@@ -105,7 +106,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                             text = "Enable Family Alerts",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Switch(
                             checked = isFamilyEnabled,
@@ -114,7 +115,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                                 prefs.edit().putBoolean("family_protection_enabled", checked).apply()
                             },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = SurfaceDark,
+                                checkedThumbColor = AppTheme.colors.background,
                                 checkedTrackColor = AccentEmerald
                             )
                         )
@@ -126,7 +127,8 @@ fun FamilyProtectionScreen(navController: NavController) {
 
             if (isFamilyEnabled) {
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = CardNavy),
+                    colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
                     shape = RoundedCornerShape(18.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -135,7 +137,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                             text = "Trusted Family Contact",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -147,8 +149,10 @@ fun FamilyProtectionScreen(navController: NavController) {
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = TextWhite,
-                                unfocusedTextColor = TextWhite
+                                focusedTextColor = AppTheme.colors.textPrimary,
+                                unfocusedTextColor = AppTheme.colors.textPrimary,
+                                focusedBorderColor = AccentEmerald,
+                                unfocusedBorderColor = AppTheme.colors.border
                             )
                         )
 
@@ -161,8 +165,10 @@ fun FamilyProtectionScreen(navController: NavController) {
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = TextWhite,
-                                unfocusedTextColor = TextWhite
+                                focusedTextColor = AppTheme.colors.textPrimary,
+                                unfocusedTextColor = AppTheme.colors.textPrimary,
+                                focusedBorderColor = AccentEmerald,
+                                unfocusedBorderColor = AppTheme.colors.border
                             )
                         )
 
@@ -182,7 +188,11 @@ fun FamilyProtectionScreen(navController: NavController) {
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
                         ) {
-                            Text("SAVE TRUSTED CONTACT", fontWeight = FontWeight.Bold, color = SurfaceDark)
+                            Text(
+                                "SAVE TRUSTED CONTACT",
+                                fontWeight = FontWeight.Bold,
+                                color = if (AppTheme.colors.isDark) SurfaceDark else androidx.compose.ui.graphics.Color(0xFF0F172A)
+                            )
                         }
 
                         if (savedMessage) {
@@ -201,7 +211,8 @@ fun FamilyProtectionScreen(navController: NavController) {
 
             // Privacy Guarantee
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavyElevated.copy(alpha = 0.4f)),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -219,7 +230,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                     Text(
                         text = "Zero Surveillance: Family members are never shown message chats or personal text. They only receive a safety notice: 'Your parent received a high-risk scam alert.'",
                         fontSize = 13.sp,
-                        color = TextMuted,
+                        color = AppTheme.colors.textSecondary,
                         lineHeight = 19.sp
                     )
                 }

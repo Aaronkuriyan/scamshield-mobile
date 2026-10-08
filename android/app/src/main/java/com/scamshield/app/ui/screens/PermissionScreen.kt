@@ -2,7 +2,9 @@ package com.scamshield.app.ui.screens
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -52,7 +54,7 @@ fun PermissionScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -75,20 +77,21 @@ fun PermissionScreen(navController: NavController) {
                     text = stringResource(R.string.permission_title),
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = stringResource(R.string.permission_desc),
                     fontSize = 17.sp,
-                    color = TextMuted,
+                    color = AppTheme.colors.textSecondary,
                     lineHeight = 25.sp
                 )
 
                 Spacer(modifier = Modifier.height(28.dp))
 
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = CardNavy),
+                    colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                    border = BorderStroke(1.dp, AppTheme.colors.border),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -105,14 +108,14 @@ fun PermissionScreen(navController: NavController) {
                                 text = "How it works:",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextWhite
+                                color = AppTheme.colors.textPrimary
                             )
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = "1. When a message notification arrives, SCAMSHIELD inspects it.\n\n2. If it tries to steal your OTP, money, or passwords, an alert sounds immediately.\n\n3. You are warned before you click any dangerous link.",
                             fontSize = 15.sp,
-                            color = TextWhite,
+                            color = AppTheme.colors.textPrimary,
                             lineHeight = 23.sp
                         )
                     }
@@ -135,7 +138,7 @@ fun PermissionScreen(navController: NavController) {
                         text = stringResource(R.string.btn_enable_protection),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SurfaceDark
+                        color = if (AppTheme.colors.isDark) SurfaceDark else Color(0xFF0F172A)
                     )
                 }
 
@@ -152,7 +155,8 @@ fun PermissionScreen(navController: NavController) {
                         .fillMaxWidth()
                         .height(54.dp),
                     shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMuted)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.textSecondary),
+                    border = BorderStroke(1.2.dp, AppTheme.colors.border)
                 ) {
                     Text(
                         text = stringResource(R.string.btn_continue_to_app),

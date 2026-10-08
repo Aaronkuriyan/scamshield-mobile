@@ -35,7 +35,7 @@ fun HistoryScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -52,20 +52,20 @@ fun HistoryScreen(navController: NavController) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = TextWhite)
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = AppTheme.colors.textPrimary)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Scan History",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextWhite
+                        color = AppTheme.colors.textPrimary
                     )
                 }
 
                 if (allScans.isNotEmpty()) {
                     IconButton(onClick = { showClearConfirm = true }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Clear History", tint = TextMuted)
+                        Icon(Icons.Default.Delete, contentDescription = "Clear History", tint = AppTheme.colors.textSecondary)
                     }
                 }
             }
@@ -79,7 +79,7 @@ fun HistoryScreen(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.Lock,
                             contentDescription = null,
-                            tint = TextMuted,
+                            tint = AppTheme.colors.textSecondary,
                             modifier = Modifier.size(64.dp)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
@@ -87,13 +87,13 @@ fun HistoryScreen(navController: NavController) {
                             text = "No scan logs yet.",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Incoming message notifications will appear here automatically.",
                             fontSize = 14.sp,
-                            color = TextMuted
+                            color = AppTheme.colors.textSecondary
                         )
                     }
                 }
@@ -117,9 +117,9 @@ fun HistoryScreen(navController: NavController) {
         if (showClearConfirm) {
             AlertDialog(
                 onDismissRequest = { showClearConfirm = false },
-                containerColor = CardNavy,
-                title = { Text("Clear Scan History?", color = TextWhite, fontWeight = FontWeight.Bold) },
-                text = { Text("All local scan records will be cleared. Protection will remain active.", color = TextMuted) },
+                containerColor = AppTheme.colors.surface,
+                title = { Text("Clear Scan History?", color = AppTheme.colors.textPrimary, fontWeight = FontWeight.Bold) },
+                text = { Text("All local scan records will be cleared. Protection will remain active.", color = AppTheme.colors.textSecondary) },
                 confirmButton = {
                     TextButton(onClick = {
                         scope.launch {
@@ -132,7 +132,7 @@ fun HistoryScreen(navController: NavController) {
                 },
                 dismissButton = {
                     TextButton(onClick = { showClearConfirm = false }) {
-                        Text("CANCEL", color = TextWhite)
+                        Text("CANCEL", color = AppTheme.colors.textPrimary)
                     }
                 }
             )
@@ -158,7 +158,8 @@ fun HistoryItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = CardNavy),
+        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+        border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
@@ -190,21 +191,21 @@ fun HistoryItemCard(
                             text = "— ${scan.classification}",
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = scan.category,
                         fontSize = 15.sp,
-                        color = TextWhite,
+                        color = AppTheme.colors.textPrimary,
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "$timeFormatted • ${scan.senderTitle}",
                         fontSize = 13.sp,
-                        color = TextMuted
+                        color = AppTheme.colors.textSecondary
                     )
                 }
             }

@@ -2,6 +2,8 @@ package com.scamshield.app.ui.screens
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,9 +27,10 @@ import com.scamshield.app.data.network.NetworkClient
 import com.scamshield.app.data.repository.ScanRepository
 import com.scamshield.app.service.ScamNotificationListenerService
 import com.scamshield.app.service.TextToSpeechHelper
-import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
+import com.scamshield.app.util.AppThemeMode
 import com.scamshield.app.util.LocaleHelper
+import com.scamshield.app.util.ThemeManager
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,6 +42,7 @@ fun SettingsScreen(navController: NavController) {
     var isProtectionActive by remember { mutableStateOf(ScamNotificationListenerService.isProtectionActive(context)) }
     var isVoiceAlertsEnabled by remember { mutableStateOf(TextToSpeechHelper.isVoiceAlertEnabled(context)) }
     var currentLanguage by remember { mutableStateOf(LocaleHelper.getLanguage(context)) }
+    val currentThemeMode by ThemeManager.themeMode.collectAsState()
 
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showClearConfirm by remember { mutableStateOf(false) }
@@ -50,9 +55,12 @@ fun SettingsScreen(navController: NavController) {
         Triple("hi", "हिन्दी (Hindi)", "🇮🇳")
     )
 
+    val isDark = AppTheme.colors.isDark
+    val logoRes = if (isDark) R.drawable.ic_scamshield_logo_light else R.drawable.ic_scamshield_logo_dark
+
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -71,7 +79,7 @@ fun SettingsScreen(navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(R.string.btn_back),
-                        tint = TextWhite
+                        tint = AppTheme.colors.textPrimary
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -79,11 +87,94 @@ fun SettingsScreen(navController: NavController) {
                     text = stringResource(R.string.settings_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
             }
 
-            // Section 1: Language Preference
+            // Section: Appearance & Theme
+            Text(
+                text = stringResource(R.string.setting_appearance),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = AccentEmerald,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Card(
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = stringResource(R.string.theme_title),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppTheme.colors.textPrimary
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    val themeOptions = listOf(
+                        Triple(AppThemeMode.SYSTEM, stringResource(R.string.theme_system), "⚙️"),
+                        Triple(AppThemeMode.LIGHT, stringResource(R.string.theme_light), "☀️"),
+                        Triple(AppThemeMode.DARK, stringResource(R.string.theme_dark), "🌙")
+                    )
+
+                    themeOptions.forEach { (mode, label, icon) ->
+                        val isSelected = currentThemeMode == mode
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                                .clickable {
+                                    ThemeManager.setThemeMode(context, mode)
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSelected) {
+                                    if (isDark) CardNavyElevated else AccentEmeraldLight
+                                } else {
+                                    AppTheme.colors.surfaceElevated
+                                }
+                            ),
+                            border = if (isSelected) BorderStroke(1.5.dp, AccentEmerald) else BorderStroke(1.dp, AppTheme.colors.border),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 14.dp, vertical = 12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(text = icon, fontSize = 18.sp)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = label,
+                                        fontSize = 15.sp,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                        color = if (isSelected) AccentEmerald else AppTheme.colors.textPrimary
+                                    )
+                                }
+                                if (isSelected) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        tint = AccentEmerald,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Section: Language Preference
             Text(
                 text = "LANGUAGE",
                 fontSize = 13.sp,
@@ -94,7 +185,8 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -112,7 +204,7 @@ fun SettingsScreen(navController: NavController) {
                             text = stringResource(R.string.setting_language),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(3.dp))
                         val currentLabel = languages.firstOrNull { it.first == currentLanguage }?.second ?: "English"
@@ -123,13 +215,13 @@ fun SettingsScreen(navController: NavController) {
                             fontWeight = FontWeight.Medium
                         )
                     }
-                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
+                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = AppTheme.colors.textSecondary)
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Section 2: Real-time Protection
+            // Section: Real-time Protection
             Text(
                 text = "REAL-TIME PROTECTION",
                 fontSize = 13.sp,
@@ -140,7 +232,8 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -155,13 +248,13 @@ fun SettingsScreen(navController: NavController) {
                                 text = "Active Message Monitoring",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextWhite
+                                color = AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = "Automatically checks incoming message notifications",
                                 fontSize = 13.sp,
-                                color = TextMuted
+                                color = AppTheme.colors.textSecondary
                             )
                         }
                         Switch(
@@ -171,13 +264,13 @@ fun SettingsScreen(navController: NavController) {
                                 ScamNotificationListenerService.setProtectionActive(context, checked)
                             },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = SurfaceDark,
+                                checkedThumbColor = AppTheme.colors.background,
                                 checkedTrackColor = AccentEmerald
                             )
                         )
                     }
 
-                    HorizontalDivider(color = DividerColor, modifier = Modifier.padding(vertical = 12.dp))
+                    HorizontalDivider(color = AppTheme.colors.divider, modifier = Modifier.padding(vertical = 12.dp))
 
                     Row(
                         modifier = Modifier
@@ -193,7 +286,7 @@ fun SettingsScreen(navController: NavController) {
                                 text = "System Notification Permission",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextWhite
+                                color = AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
@@ -202,14 +295,14 @@ fun SettingsScreen(navController: NavController) {
                                 color = if (isNotificationServiceEnabled(context)) AccentEmerald else CautionAmber
                             )
                         }
-                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
+                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = AppTheme.colors.textSecondary)
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Section 3: Audio & Voice Warnings
+            // Section: Audio & Voice Warnings
             Text(
                 text = "AUDIO & ACCESSIBILITY",
                 fontSize = 13.sp,
@@ -220,7 +313,8 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -236,13 +330,13 @@ fun SettingsScreen(navController: NavController) {
                             text = stringResource(R.string.setting_voice_alert),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = stringResource(R.string.setting_voice_alert_desc),
                             fontSize = 13.sp,
-                            color = TextMuted
+                            color = AppTheme.colors.textSecondary
                         )
                     }
                     Switch(
@@ -252,7 +346,7 @@ fun SettingsScreen(navController: NavController) {
                             TextToSpeechHelper.setVoiceAlertEnabled(context, checked)
                         },
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = SurfaceDark,
+                            checkedThumbColor = AppTheme.colors.background,
                             checkedTrackColor = AccentEmerald
                         )
                     )
@@ -261,7 +355,7 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Section 4: Privacy Statement
+            // Section: Privacy Statement
             Text(
                 text = "PRIVACY & SECURITY",
                 fontSize = 13.sp,
@@ -272,7 +366,8 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -289,14 +384,14 @@ fun SettingsScreen(navController: NavController) {
                             text = stringResource(R.string.setting_privacy_title),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(R.string.setting_privacy_desc),
                         fontSize = 13.sp,
-                        color = TextWhite.copy(alpha = 0.85f),
+                        color = AppTheme.colors.textSecondary,
                         lineHeight = 20.sp
                     )
                 }
@@ -304,7 +399,7 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Section 5: Data & Reset
+            // Section: Data & Reset
             Text(
                 text = "DATA MANAGEMENT",
                 fontSize = 13.sp,
@@ -315,7 +410,8 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CardNavy),
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -332,19 +428,19 @@ fun SettingsScreen(navController: NavController) {
                                 text = stringResource(R.string.setting_backend_url),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = TextWhite
+                                color = AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = baseUrl,
                                 fontSize = 13.sp,
-                                color = TextMuted
+                                color = AppTheme.colors.textSecondary
                             )
                         }
                         Icon(Icons.Default.Edit, contentDescription = null, tint = AccentEmerald)
                     }
 
-                    HorizontalDivider(color = DividerColor, modifier = Modifier.padding(vertical = 12.dp))
+                    HorizontalDivider(color = AppTheme.colors.divider, modifier = Modifier.padding(vertical = 12.dp))
 
                     Row(
                         modifier = Modifier
@@ -366,23 +462,48 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // App Version Info
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            // Section: About SCAMSHIELD
+            Card(
+                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                border = BorderStroke(1.dp, AppTheme.colors.border),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = "SCAMSHIELD Mobile v1.0",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextWhite
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.app_tagline),
-                    fontSize = 12.sp,
-                    color = TextMuted
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = logoRes),
+                        contentDescription = "SCAMSHIELD Logo",
+                        modifier = Modifier.size(68.dp)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "SCAMSHIELD",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.textPrimary,
+                        letterSpacing = 1.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "AI-powered scam protection.",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AccentEmerald
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.about_scamshield_desc),
+                        fontSize = 13.sp,
+                        color = AppTheme.colors.textSecondary,
+                        lineHeight = 19.sp,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -392,9 +513,9 @@ fun SettingsScreen(navController: NavController) {
         if (showLanguageDialog) {
             AlertDialog(
                 onDismissRequest = { showLanguageDialog = false },
-                containerColor = CardNavy,
-                titleContentColor = TextWhite,
-                textContentColor = TextWhite,
+                containerColor = AppTheme.colors.surface,
+                titleContentColor = AppTheme.colors.textPrimary,
+                textContentColor = AppTheme.colors.textPrimary,
                 title = {
                     Text(
                         text = stringResource(R.string.choose_language_title),
@@ -415,8 +536,13 @@ fun SettingsScreen(navController: NavController) {
                                         showLanguageDialog = false
                                     },
                                 colors = CardDefaults.cardColors(
-                                    containerColor = if (isSelected) AccentEmeraldDark.copy(alpha = 0.5f) else SurfaceDark
+                                    containerColor = if (isSelected) {
+                                        if (isDark) CardNavyElevated else AccentEmeraldLight
+                                    } else {
+                                        AppTheme.colors.surfaceElevated
+                                    }
                                 ),
+                                border = if (isSelected) BorderStroke(1.5.dp, AccentEmerald) else BorderStroke(1.dp, AppTheme.colors.border),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
                                 Row(
@@ -429,7 +555,7 @@ fun SettingsScreen(navController: NavController) {
                                     Text(
                                         text = "$flag  $label",
                                         fontSize = 16.sp,
-                                        color = if (isSelected) AccentEmerald else TextWhite,
+                                        color = if (isSelected) AccentEmerald else AppTheme.colors.textPrimary,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     )
                                     if (isSelected) {
@@ -457,9 +583,9 @@ fun SettingsScreen(navController: NavController) {
         if (showClearConfirm) {
             AlertDialog(
                 onDismissRequest = { showClearConfirm = false },
-                containerColor = CardNavy,
+                containerColor = AppTheme.colors.surface,
                 titleContentColor = AlertCrimson,
-                textContentColor = TextWhite,
+                textContentColor = AppTheme.colors.textPrimary,
                 title = { Text("Clear All Scan History?") },
                 text = { Text("This will permanently remove all analyzed message logs from local storage.") },
                 confirmButton = {
@@ -476,7 +602,7 @@ fun SettingsScreen(navController: NavController) {
                 },
                 dismissButton = {
                     TextButton(onClick = { showClearConfirm = false }) {
-                        Text("CANCEL", color = TextMuted)
+                        Text("CANCEL", color = AppTheme.colors.textSecondary)
                     }
                 }
             )
@@ -487,13 +613,13 @@ fun SettingsScreen(navController: NavController) {
             var tempUrl by remember { mutableStateOf(baseUrl) }
             AlertDialog(
                 onDismissRequest = { showEditUrlDialog = false },
-                containerColor = CardNavy,
-                titleContentColor = TextWhite,
-                textContentColor = TextWhite,
+                containerColor = AppTheme.colors.surface,
+                titleContentColor = AppTheme.colors.textPrimary,
+                textContentColor = AppTheme.colors.textPrimary,
                 title = { Text("Backend Server URL") },
                 text = {
                     Column {
-                        Text("Set the IP/URL of your running FastAPI service:", fontSize = 13.sp, color = TextMuted)
+                        Text("Set the IP/URL of your running FastAPI service:", fontSize = 13.sp, color = AppTheme.colors.textSecondary)
                         Spacer(modifier = Modifier.height(10.dp))
                         OutlinedTextField(
                             value = tempUrl,
@@ -501,9 +627,9 @@ fun SettingsScreen(navController: NavController) {
                             singleLine = true,
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = AccentEmerald,
-                                unfocusedBorderColor = CardNavyBorder,
-                                focusedTextColor = TextWhite,
-                                unfocusedTextColor = TextWhite
+                                unfocusedBorderColor = AppTheme.colors.border,
+                                focusedTextColor = AppTheme.colors.textPrimary,
+                                unfocusedTextColor = AppTheme.colors.textPrimary
                             )
                         )
                     }
@@ -521,7 +647,7 @@ fun SettingsScreen(navController: NavController) {
                 },
                 dismissButton = {
                     TextButton(onClick = { showEditUrlDialog = false }) {
-                        Text("CANCEL", color = TextMuted)
+                        Text("CANCEL", color = AppTheme.colors.textSecondary)
                     }
                 }
             )

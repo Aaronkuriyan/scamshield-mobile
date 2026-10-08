@@ -64,7 +64,7 @@ fun ThreatDetailScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         threat?.let { threat ->
             val isHighRisk = threat.riskScore >= 70
@@ -98,6 +98,20 @@ fun ThreatDetailScreen(
                 if (parsed.isNotEmpty()) parsed else LocalScamFilter.generateWhatNotToDo(threat.category, threat.classification)
             }
 
+            val heroBgColor = if (AppTheme.colors.isDark) {
+                when {
+                    isHighRisk -> AlertCrimsonDark.copy(alpha = 0.55f)
+                    isSuspicious -> CautionAmberDark.copy(alpha = 0.4f)
+                    else -> AccentEmeraldDark.copy(alpha = 0.4f)
+                }
+            } else {
+                when {
+                    isHighRisk -> AlertCrimsonLight.copy(alpha = 0.85f)
+                    isSuspicious -> CautionAmberLight.copy(alpha = 0.85f)
+                    else -> AccentEmeraldLight.copy(alpha = 0.85f)
+                }
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -117,7 +131,7 @@ fun ThreatDetailScreen(
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = stringResource(R.string.btn_back),
-                                tint = TextWhite
+                                tint = AppTheme.colors.textPrimary
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp))
@@ -125,20 +139,14 @@ fun ThreatDetailScreen(
                             text = stringResource(R.string.details_title),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                     }
 
                     // Hero Risk Banner Card
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = when {
-                                isHighRisk -> AlertCrimsonDark.copy(alpha = 0.55f)
-                                isSuspicious -> CautionAmberDark.copy(alpha = 0.4f)
-                                else -> AccentEmeraldDark.copy(alpha = 0.4f)
-                            }
-                        ),
+                        colors = CardDefaults.cardColors(containerColor = heroBgColor),
                         border = BorderStroke(1.5.dp, themeColor),
                         shape = RoundedCornerShape(20.dp)
                     ) {
@@ -173,7 +181,7 @@ fun ThreatDetailScreen(
                                 }
 
                                 Surface(
-                                    color = themeColor.copy(alpha = 0.25f),
+                                    color = themeColor.copy(alpha = if (AppTheme.colors.isDark) 0.25f else 0.15f),
                                     shape = RoundedCornerShape(10.dp)
                                 ) {
                                     Text(
@@ -192,7 +200,7 @@ fun ThreatDetailScreen(
                                 text = threat.category,
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = TextWhite
+                                color = AppTheme.colors.textPrimary
                             )
 
                             Spacer(modifier = Modifier.height(6.dp))
@@ -200,7 +208,7 @@ fun ThreatDetailScreen(
                             Text(
                                 text = threat.recommendation,
                                 fontSize = 15.sp,
-                                color = TextWhite.copy(alpha = 0.9f),
+                                color = AppTheme.colors.textSecondary,
                                 lineHeight = 22.sp
                             )
                         }
@@ -211,7 +219,8 @@ fun ThreatDetailScreen(
                     // Message Content Box
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = CardNavy),
+                        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                        border = BorderStroke(1.dp, AppTheme.colors.border),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Column(modifier = Modifier.padding(18.dp)) {
@@ -224,13 +233,13 @@ fun ThreatDetailScreen(
                                     text = stringResource(R.string.section_message),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = TextMuted,
+                                    color = AppTheme.colors.textSecondary,
                                     letterSpacing = 1.sp
                                 )
                                 Text(
                                     text = "$sourceApp • $formattedTime",
                                     fontSize = 12.sp,
-                                    color = TextMuted,
+                                    color = AppTheme.colors.textSecondary,
                                     fontWeight = FontWeight.Medium
                                 )
                             }
@@ -241,7 +250,7 @@ fun ThreatDetailScreen(
                             Text(
                                 text = "\"$messageText\"",
                                 fontSize = 16.sp,
-                                color = TextWhite,
+                                color = AppTheme.colors.textPrimary,
                                 lineHeight = 24.sp,
                                 fontWeight = FontWeight.Normal
                             )
@@ -253,7 +262,8 @@ fun ThreatDetailScreen(
                     // "Why We Flagged This" Section
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = CardNavy),
+                        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                        border = BorderStroke(1.dp, AppTheme.colors.border),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Column(modifier = Modifier.padding(18.dp)) {
@@ -279,7 +289,7 @@ fun ThreatDetailScreen(
                                     Text(
                                         text = stringResource(R.string.safe_summary),
                                         fontSize = 15.sp,
-                                        color = TextWhite,
+                                        color = AppTheme.colors.textPrimary,
                                         lineHeight = 22.sp
                                     )
                                 }
@@ -298,7 +308,7 @@ fun ThreatDetailScreen(
                                         Text(
                                             text = indicator,
                                             fontSize = 15.sp,
-                                            color = TextWhite,
+                                            color = AppTheme.colors.textPrimary,
                                             lineHeight = 22.sp
                                         )
                                     }
@@ -312,8 +322,8 @@ fun ThreatDetailScreen(
                     // WHAT TO DO (✓) Section
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = CardNavy),
-                        border = BorderStroke(1.2.dp, AccentEmerald.copy(alpha = 0.5f)),
+                        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                        border = BorderStroke(1.2.dp, AccentEmerald.copy(alpha = if (AppTheme.colors.isDark) 0.5f else 0.8f)),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Column(modifier = Modifier.padding(18.dp)) {
@@ -321,7 +331,7 @@ fun ThreatDetailScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .background(AccentEmeraldDark, CircleShape),
+                                        .background(AccentEmerald.copy(alpha = 0.2f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
@@ -359,7 +369,7 @@ fun ThreatDetailScreen(
                                     Text(
                                         text = action,
                                         fontSize = 15.sp,
-                                        color = TextWhite,
+                                        color = AppTheme.colors.textPrimary,
                                         lineHeight = 22.sp
                                     )
                                 }
@@ -372,8 +382,8 @@ fun ThreatDetailScreen(
                     // WHAT NOT TO DO (✕) Section
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = CardNavy),
-                        border = BorderStroke(1.2.dp, AlertCrimson.copy(alpha = 0.5f)),
+                        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+                        border = BorderStroke(1.2.dp, AlertCrimson.copy(alpha = if (AppTheme.colors.isDark) 0.5f else 0.8f)),
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Column(modifier = Modifier.padding(18.dp)) {
@@ -381,7 +391,7 @@ fun ThreatDetailScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .background(AlertCrimsonDark, CircleShape),
+                                        .background(AlertCrimson.copy(alpha = 0.2f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
@@ -419,7 +429,7 @@ fun ThreatDetailScreen(
                                     Text(
                                         text = forbidden,
                                         fontSize = 15.sp,
-                                        color = TextWhite,
+                                        color = AppTheme.colors.textPrimary,
                                         lineHeight = 22.sp
                                     )
                                 }
@@ -443,13 +453,13 @@ fun ThreatDetailScreen(
                             shape = RoundedCornerShape(14.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = AlertCrimson)
                         ) {
-                            Icon(Icons.Default.Call, contentDescription = null, tint = TextWhite)
+                            Icon(Icons.Default.Call, contentDescription = null, tint = Color.White)
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = stringResource(R.string.btn_call_helpline),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = TextWhite
+                                color = Color.White
                             )
                         }
                     }
@@ -463,10 +473,10 @@ fun ThreatDetailScreen(
                             .fillMaxWidth()
                             .height(56.dp),
                         shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextWhite),
-                        border = BorderStroke(1.5.dp, CardNavyBorder)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AppTheme.colors.textPrimary),
+                        border = BorderStroke(1.2.dp, AppTheme.colors.border)
                     ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null, tint = TextWhite)
+                        Icon(Icons.Default.ArrowBack, contentDescription = null, tint = AppTheme.colors.textPrimary)
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = stringResource(R.string.btn_back),
@@ -492,21 +502,21 @@ fun ThreatDetailScreen(
                             text = "Threat Record Not Found",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "This scan record is no longer available or was cleared.",
                             fontSize = 14.sp,
-                            color = TextMuted,
+                            color = AppTheme.colors.textSecondary,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(
                             onClick = { navController.popBackStack() },
-                            colors = ButtonDefaults.buttonColors(containerColor = PrimaryNavy)
+                            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.primary)
                         ) {
-                            Text("Back to Inbox", color = TextWhite)
+                            Text("Back to Inbox", color = Color.White)
                         }
                     }
                 }

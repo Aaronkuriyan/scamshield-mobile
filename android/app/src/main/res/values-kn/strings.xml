@@ -71,4 +71,19 @@
     <string name="setting_clear_history">ಎಲ್ಲಾ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
     <string name="btn_simulate_demo">ಲೈವ್ ಡೆಮೊ ಪರೀಕ್ಷಿಸಿ</string>
     <string name="btn_safety_guide">ಹಿರಿಯರಿಗಾಗಿ ಸುರಕ್ಷತಾ ಮಾರ್ಗದರ್ಶಿ</string>
+
+    <!-- Appearance & Theme -->
+    <string name="setting_appearance">ನೋಟ (APPEARANCE)</string>
+    <string name="theme_title">ಥೀಮ್</string>
+    <string name="theme_system">ಸಿಸ್ಟಮ್ ಡೀಫಾಲ್ಟ್</string>
+    <string name="theme_light">ಲೈಟ್ ಮೋಡ್ (Light)</string>
+    <string name="theme_dark">ಡಾರ್ಕ್ ಮೋಡ್ (Dark)</string>
+    <string name="about_scamshield_title">SCAMSHIELD ಬಗ್ಗೆ</string>
+    <string name="about_scamshield_desc">SCAMSHIELD ಸಂಭಾವ್ಯ ವಂಚನೆ ಸಂದೇಶಗಳನ್ನು ಗುರುತಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ ಮತ್ತು ಏನು ಮಾಡಬೇಕು ಮತ್ತು ಏನು ಮಾಡಬಾರದು ಎಂಬುದರ ಕುರಿತು ಸ್ಪಷ್ಟ ಮಾರ್ಗದರ್ಶನ ನೀಡುತ್ತದೆ.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">ಮುಖಪುಟ</string>
+    <string name="nav_protection">ರಕ್ಷಣೆ</string>
+    <string name="nav_safety">ಸುರಕ್ಷತೆ</string>
+    <string name="nav_settings">ಸೆಟ್ಟಿಂಗ್ಸ್</string>
 </resources>

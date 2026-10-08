@@ -79,7 +79,7 @@ val SAFETY_TOPICS = listOf(
 fun SafetyGuideScreen(navController: NavController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
+        color = AppTheme.colors.background
     ) {
         Column(
             modifier = Modifier
@@ -93,21 +93,21 @@ fun SafetyGuideScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = TextWhite)
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = AppTheme.colors.textPrimary)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Safety Guide",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
             }
 
             Text(
                 text = "Simple rules to keep you and your family safe from message scams:",
                 fontSize = 16.sp,
-                color = TextMuted,
+                color = AppTheme.colors.textSecondary,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -128,7 +128,8 @@ fun SafetyTopicCard(topic: SafetyTopic) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = CardNavy),
+        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
+        border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -144,7 +145,7 @@ fun SafetyTopicCard(topic: SafetyTopic) {
                     text = topic.title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite,
+                    color = AppTheme.colors.textPrimary,
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
@@ -174,13 +175,16 @@ fun SafetyTopicCard(topic: SafetyTopic) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = SurfaceDark),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (AppTheme.colors.isDark) AppTheme.colors.background else androidx.compose.ui.graphics.Color(0xFFF1F5F9)
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, AppTheme.colors.border),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
                         text = topic.fakeExample,
                         fontSize = 14.sp,
-                        color = TextWhite,
+                        color = AppTheme.colors.textPrimary,
                         modifier = Modifier.padding(10.dp)
                     )
                 }
@@ -191,13 +195,13 @@ fun SafetyTopicCard(topic: SafetyTopic) {
                     text = "Why this is dangerous:",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = topic.whyDangerous,
                     fontSize = 14.sp,
-                    color = TextMuted,
+                    color = AppTheme.colors.textSecondary,
                     lineHeight = 20.sp
                 )
             }

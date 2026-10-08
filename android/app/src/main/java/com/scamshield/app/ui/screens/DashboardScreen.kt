@@ -3,7 +3,6 @@ package com.scamshield.app.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,6 +58,8 @@ fun DashboardScreen(navController: NavController) {
     val isProtectionOn by remember { mutableStateOf(ScamNotificationListenerService.isProtectionActive(context)) }
     val isFullyActive = isPermissionActive && isProtectionOn
 
+    val isDark = AppTheme.colors.isDark
+
     // Re-check permission on composition and auto-seed initial scenarios
     LaunchedEffect(Unit) {
         isPermissionActive = isNotificationServiceEnabled(context)
@@ -89,13 +90,73 @@ fun DashboardScreen(navController: NavController) {
         }
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = SurfaceDark
-    ) {
+    Scaffold(
+        containerColor = AppTheme.colors.background,
+        bottomBar = {
+            NavigationBar(
+                containerColor = AppTheme.colors.surface,
+                contentColor = AppTheme.colors.textPrimary,
+                tonalElevation = 6.dp
+            ) {
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { /* Already on Home */ },
+                    icon = { Icon(Icons.Default.Home, contentDescription = stringResource(R.string.nav_home)) },
+                    label = { Text(stringResource(R.string.nav_home), fontWeight = FontWeight.Bold, fontSize = 12.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AccentEmerald,
+                        selectedTextColor = AccentEmerald,
+                        unselectedIconColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        unselectedTextColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        indicatorColor = if (isDark) AccentEmeraldDark.copy(alpha = 0.45f) else AccentEmeraldLight
+                    )
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.FamilyProtection.route) },
+                    icon = { Icon(Icons.Default.Shield, contentDescription = stringResource(R.string.nav_protection)) },
+                    label = { Text(stringResource(R.string.nav_protection), fontWeight = FontWeight.Medium, fontSize = 12.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AccentEmerald,
+                        selectedTextColor = AccentEmerald,
+                        unselectedIconColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        unselectedTextColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        indicatorColor = if (isDark) AccentEmeraldDark.copy(alpha = 0.45f) else AccentEmeraldLight
+                    )
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.SafetyGuide.route) },
+                    icon = { Icon(Icons.Default.MenuBook, contentDescription = stringResource(R.string.nav_safety)) },
+                    label = { Text(stringResource(R.string.nav_safety), fontWeight = FontWeight.Medium, fontSize = 12.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AccentEmerald,
+                        selectedTextColor = AccentEmerald,
+                        unselectedIconColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        unselectedTextColor = if (isDark) AppTheme.colors.textSecondary else Color(0xFF475569),
+                        indicatorColor = if (isDark) AccentEmeraldDark.copy(alpha = 0.45f) else AccentEmeraldLight
+                    )
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(Screen.Settings.route) },
+                    icon = { Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.nav_settings)) },
+                    label = { Text(stringResource(R.string.nav_settings), fontWeight = FontWeight.Medium, fontSize = 12.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AccentEmerald,
+                        selectedTextColor = AccentEmerald,
+                        unselectedIconColor = AppTheme.colors.textSecondary,
+                        unselectedTextColor = AppTheme.colors.textSecondary,
+                        indicatorColor = if (isDark) AccentEmeraldDark.copy(alpha = 0.45f) else AccentEmeraldLight
+                    )
+                )
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(horizontal = 18.dp)
         ) {
             // App Bar
@@ -110,7 +171,10 @@ fun DashboardScreen(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .size(38.dp)
-                            .background(AccentEmeraldDark.copy(alpha = 0.4f), CircleShape),
+                            .background(
+                                if (isDark) AccentEmeraldDark.copy(alpha = 0.4f) else AccentEmeraldLight,
+                                CircleShape
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -126,7 +190,7 @@ fun DashboardScreen(navController: NavController) {
                             text = "SCAMSHIELD",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite,
+                            color = AppTheme.colors.textPrimary,
                             letterSpacing = 1.sp
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -151,7 +215,7 @@ fun DashboardScreen(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = stringResource(R.string.settings_title),
-                            tint = TextWhite,
+                            tint = AppTheme.colors.textPrimary,
                             modifier = Modifier.size(26.dp)
                         )
                     }
@@ -167,8 +231,10 @@ fun DashboardScreen(navController: NavController) {
                         .clickable {
                             context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         },
-                    colors = CardDefaults.cardColors(containerColor = CautionAmberDark.copy(alpha = 0.5f)),
-                    border = BorderStroke(1.dp, CautionAmber),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isDark) CautionAmberDark.copy(alpha = 0.4f) else CautionAmberLight
+                    ),
+                    border = BorderStroke(1.dp, if (isDark) CautionAmber else CautionAmberBorder),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Row(
@@ -195,7 +261,7 @@ fun DashboardScreen(navController: NavController) {
                             Text(
                                 text = stringResource(R.string.status_action_required_sub),
                                 fontSize = 13.sp,
-                                color = TextWhite
+                                color = if (isDark) TextWhite else Color(0xFF78350F)
                             )
                         }
                         Icon(
@@ -260,7 +326,7 @@ fun DashboardScreen(navController: NavController) {
                     text = stringResource(R.string.inbox_heading),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextWhite
+                    color = AppTheme.colors.textPrimary
                 )
 
                 TextButton(
@@ -298,7 +364,7 @@ fun DashboardScreen(navController: NavController) {
                         Box(
                             modifier = Modifier
                                 .size(64.dp)
-                                .background(CardNavy, CircleShape),
+                                .background(AppTheme.colors.surfaceElevated, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
@@ -313,13 +379,13 @@ fun DashboardScreen(navController: NavController) {
                             text = if (allScans.isEmpty()) stringResource(R.string.empty_inbox_title) else stringResource(R.string.empty_threats_title),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = if (allScans.isEmpty()) stringResource(R.string.empty_inbox_desc) else stringResource(R.string.empty_threats_desc),
                             fontSize = 14.sp,
-                            color = TextMuted,
+                            color = AppTheme.colors.textSecondary,
                             lineHeight = 20.sp
                         )
                     }
@@ -348,9 +414,9 @@ fun DashboardScreen(navController: NavController) {
         if (showDemoDialog) {
             AlertDialog(
                 onDismissRequest = { showDemoDialog = false },
-                containerColor = CardNavy,
-                titleContentColor = TextWhite,
-                textContentColor = TextWhite,
+                containerColor = AppTheme.colors.surface,
+                titleContentColor = AppTheme.colors.textPrimary,
+                textContentColor = AppTheme.colors.textSecondary,
                 title = {
                     Text(
                         text = "Live Mentor Test Scenarios",
@@ -365,11 +431,12 @@ fun DashboardScreen(navController: NavController) {
                         Text(
                             text = "Tap a scenario to test automatic notification detection without copy-pasting:",
                             fontSize = 14.sp,
-                            color = TextMuted
+                            color = AppTheme.colors.textSecondary
                         )
                         DemoSimulator.PRELOADED_TEST_CASES.forEach { testCase ->
                             Card(
-                                colors = CardDefaults.cardColors(containerColor = SurfaceDark),
+                                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surfaceElevated),
+                                border = BorderStroke(1.dp, AppTheme.colors.border),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -390,7 +457,7 @@ fun DashboardScreen(navController: NavController) {
                                             text = testCase.title,
                                             fontSize = 15.sp,
                                             fontWeight = FontWeight.Bold,
-                                            color = TextWhite
+                                            color = AppTheme.colors.textPrimary
                                         )
                                         val badgeColor = when {
                                             testCase.expectedType.contains("HIGH", ignoreCase = true) -> AlertCrimson
@@ -408,7 +475,7 @@ fun DashboardScreen(navController: NavController) {
                                     Text(
                                         text = testCase.content,
                                         fontSize = 13.sp,
-                                        color = TextMuted,
+                                        color = AppTheme.colors.textSecondary,
                                         maxLines = 2,
                                         overflow = TextOverflow.Ellipsis
                                     )
@@ -436,12 +503,20 @@ fun FilterTabItem(
     badgeColor: Color,
     onClick: () -> Unit
 ) {
+    val isDark = AppTheme.colors.isDark
+    val containerBg = if (isSelected) {
+        if (isDark) CardNavyBorder else AccentEmeraldLight
+    } else {
+        AppTheme.colors.surfaceElevated
+    }
+    val borderColor = if (isSelected) badgeColor else AppTheme.colors.border
+
     Card(
         modifier = modifier.clickable { onClick() },
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) CardNavyBorder else CardNavy
+            containerColor = containerBg
         ),
-        border = if (isSelected) BorderStroke(1.5.dp, badgeColor) else null,
+        border = BorderStroke(if (isSelected) 1.5.dp else 1.dp, borderColor),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
@@ -454,13 +529,13 @@ fun FilterTabItem(
                 text = count.toString(),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) badgeColor else TextWhite
+                color = if (isSelected) badgeColor else AppTheme.colors.textPrimary
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = title,
                 fontSize = 11.sp,
-                color = if (isSelected) TextWhite else TextMuted,
+                color = if (isSelected) AppTheme.colors.textPrimary else AppTheme.colors.textSecondary,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                 maxLines = 1
             )
@@ -477,6 +552,7 @@ fun MessageItemCard(
     val isHighRisk = message.riskScore >= 70
     val isSuspicious = message.riskScore in 35..69
     val isSafe = message.riskScore < 35
+    val isDark = AppTheme.colors.isDark
 
     val themeColor = when {
         isHighRisk -> AlertCrimson
@@ -485,9 +561,15 @@ fun MessageItemCard(
     }
 
     val containerBg = when {
-        isHighRisk -> AlertCrimsonDark.copy(alpha = 0.5f)
-        isSuspicious -> CautionAmberDark.copy(alpha = 0.35f)
-        else -> CardNavy
+        isHighRisk -> if (isDark) AlertCrimsonDark.copy(alpha = 0.22f) else AlertCrimsonLight
+        isSuspicious -> if (isDark) CautionAmberDark.copy(alpha = 0.22f) else CautionAmberLight
+        else -> if (isDark) AppTheme.colors.surface else AccentEmeraldLight.copy(alpha = 0.6f)
+    }
+
+    val cardBorder = when {
+        isHighRisk -> BorderStroke(1.2.dp, if (isDark) AlertCrimson.copy(alpha = 0.5f) else AlertCrimsonBorder)
+        isSuspicious -> BorderStroke(1.2.dp, if (isDark) CautionAmber.copy(alpha = 0.5f) else CautionAmberBorder)
+        else -> BorderStroke(1.dp, if (isDark) AppTheme.colors.border else AccentEmeraldBorder)
     }
 
     val sourceApp = remember(message.sourcePackage) {
@@ -503,7 +585,7 @@ fun MessageItemCard(
             .fillMaxWidth()
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = containerBg),
-        border = BorderStroke(1.2.dp, themeColor.copy(alpha = 0.6f)),
+        border = cardBorder,
         shape = RoundedCornerShape(18.dp)
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
@@ -535,7 +617,7 @@ fun MessageItemCard(
 
                 // Risk Score Tag
                 Surface(
-                    color = themeColor.copy(alpha = 0.2f),
+                    color = themeColor.copy(alpha = if (isDark) 0.2f else 0.12f),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
@@ -555,7 +637,7 @@ fun MessageItemCard(
                 text = message.category,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextWhite
+                color = AppTheme.colors.textPrimary
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -567,7 +649,7 @@ fun MessageItemCard(
             Text(
                 text = previewText,
                 fontSize = 14.sp,
-                color = TextWhite.copy(alpha = 0.85f),
+                color = if (isDark) TextWhite.copy(alpha = 0.88f) else Color(0xFF334155),
                 lineHeight = 20.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -585,14 +667,14 @@ fun MessageItemCard(
                     Icon(
                         imageVector = if (sourceApp == "WhatsApp") Icons.Default.Phone else Icons.Default.Email,
                         contentDescription = null,
-                        tint = TextMuted,
+                        tint = AppTheme.colors.textSecondary,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "$sourceApp • $relativeTime",
                         fontSize = 12.sp,
-                        color = TextMuted,
+                        color = AppTheme.colors.textSecondary,
                         fontWeight = FontWeight.Medium
                     )
                 }
