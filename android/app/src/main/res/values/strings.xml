@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">SCAMSHIELD</string>
+    <string name="app_tagline">AI-powered protection against scam messages.</string>
+    <string name="notification_listener_service_label">SCAMSHIELD Message Guard</string>
+
+    <!-- Onboarding & Permissions -->
+    <string name="onboarding_title">Automatic Scam Protection</string>
+    <string name="onboarding_desc">SCAMSHIELD watches incoming message notifications and alerts you immediately if a message attempts to steal your money, OTP, or identity.</string>
+    <string name="onboarding_privacy_note">Privacy First: Normal conversations like family greetings are never uploaded. Only suspicious signals undergo deep verification.</string>
+    <string name="btn_enable_protection">Enable Protection</string>
+    <string name="permission_title">Allow Notification Access</string>
+    <string name="permission_desc">To protect you automatically without requiring you to copy and paste messages, SCAMSHIELD needs permission to inspect incoming message notifications.</string>
+
+    <!-- Dashboard -->
+    <string name="status_protected">PROTECTION ACTIVE</string>
+    <string name="status_protected_sub">You are protected from scam messages.</string>
+    <string name="status_action_required">ACTION REQUIRED</string>
+    <string name="status_action_required_sub">Tap here to enable notification protection.</string>
+    <string name="stat_checked">Messages Checked</string>
+    <string name="stat_threats">Threats Blocked</string>
+    <string name="btn_recent_threats">View Threat History</string>
+    <string name="btn_safety_guide">Safety Guide</string>
+    <string name="btn_simulate_demo">Test Live Demo Alert</string>
+
+    <!-- Threat Warnings (Elderly-First) -->
+    <string name="warning_banner_scam">⚠️ POSSIBLE SCAM DETECTED</string>
+    <string name="warning_banner_suspicious">⚠️ CAUTION: SUSPICIOUS MESSAGE</string>
+    <string name="warning_safe">SAFE MESSAGE</string>
+    <string name="warning_advice_title">What you should do:</string>
+    <string name="rule_no_click">Do NOT click any link.</string>
+    <string name="rule_no_otp">Do NOT share your OTP or PIN.</string>
+    <string name="rule_no_money">Do NOT send money.</string>
+    <string name="rule_verify">Verify directly through your bank or official service.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_history">History</string>
+    <string name="nav_safety">Safety</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="setting_voice_alert">Voice Warning (Text-to-Speech)</string>
+    <string name="setting_voice_alert_desc">Speak aloud warning alerts when a high-risk scam is detected.</string>
+    <string name="setting_backend_url">Backend API Server</string>
+    <string name="setting_clear_history">Clear Scan History</string>
+    <string name="setting_family_protection">Family Protection (Optional)</string>
+</resources>

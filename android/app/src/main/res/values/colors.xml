@@ -1,0 +1,14 @@
+<resources>
+    <!-- Brand High-Contrast Accessible Colors -->
+    <color name="primary_dark">#0A192F</color>
+    <color name="primary_card">#112240</color>
+    <color name="accent_emerald">#10B981</color>
+    <color name="accent_emerald_subtle">#064E3B</color>
+    <color name="alert_crimson">#EF4444</color>
+    <color name="alert_crimson_subtle">#7F1D1D</color>
+    <color name="caution_amber">#F59E0B</color>
+    <color name="caution_amber_subtle">#78350F</color>
+    <color name="text_high_contrast">#FFFFFF</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="surface_dark">#020C1B</color>
+</resources>
