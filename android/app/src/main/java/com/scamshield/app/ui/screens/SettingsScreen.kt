@@ -146,7 +146,7 @@ fun SettingsScreen(navController: NavController) {
                                 color = if (isNotificationServiceEnabled(context)) AccentEmerald else CautionAmber
                             )
                         }
-                        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = TextMuted)
+                        Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
                     }
                 }
             }
@@ -243,7 +243,7 @@ fun SettingsScreen(navController: NavController) {
                             color = TextMuted
                         )
                     }
-                    Icon(Icons.Default.ChevronRight, contentDescription = null, tint = TextMuted)
+                    Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = TextMuted)
                 }
             }
 

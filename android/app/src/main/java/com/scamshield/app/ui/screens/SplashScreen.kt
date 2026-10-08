@@ -7,7 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -66,7 +66,7 @@ fun SplashScreen(navController: NavController) {
             modifier = Modifier.scale(scale.value)
         ) {
             Icon(
-                imageVector = Icons.Default.Shield,
+                imageVector = Icons.Default.Lock,
                 contentDescription = "SCAMSHIELD Logo",
                 tint = AccentEmerald,
                 modifier = Modifier.size(96.dp)

@@ -66,7 +66,7 @@ fun DashboardScreen(navController: NavController) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Default.Shield,
+                        imageVector = Icons.Default.Lock,
                         contentDescription = null,
                         tint = AccentEmerald,
                         modifier = Modifier.size(32.dp)
@@ -122,7 +122,7 @@ fun DashboardScreen(navController: NavController) {
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = if (isFullyActive) Icons.Default.VerifiedUser else Icons.Default.Warning,
+                            imageVector = if (isFullyActive) Icons.Default.CheckCircle else Icons.Default.Warning,
                             contentDescription = null,
                             tint = SurfaceDark,
                             modifier = Modifier.size(44.dp)
@@ -160,14 +160,14 @@ fun DashboardScreen(navController: NavController) {
                     modifier = Modifier.weight(1f),
                     title = "Checked",
                     count = totalScans.toString(),
-                    icon = Icons.Default.Security,
+                    icon = Icons.Default.CheckCircle,
                     color = AccentEmerald
                 )
                 StatCard(
                     modifier = Modifier.weight(1f),
                     title = "Threats Blocked",
                     count = totalThreats.toString(),
-                    icon = Icons.Default.GppBad,
+                    icon = Icons.Default.Warning,
                     color = if (totalThreats > 0) AlertCrimson else TextMuted
                 )
             }
@@ -194,7 +194,7 @@ fun DashboardScreen(navController: NavController) {
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CardNavy)
             ) {
-                Icon(Icons.Default.History, contentDescription = null, tint = AccentEmerald)
+                Icon(Icons.Default.Refresh, contentDescription = null, tint = AccentEmerald)
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "VIEW THREAT HISTORY",
@@ -214,7 +214,7 @@ fun DashboardScreen(navController: NavController) {
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CardNavy)
             ) {
-                Icon(Icons.Default.MenuBook, contentDescription = null, tint = AccentEmerald)
+                Icon(Icons.Default.Info, contentDescription = null, tint = AccentEmerald)
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "SAFETY GUIDE FOR ELDERLY",
@@ -235,7 +235,7 @@ fun DashboardScreen(navController: NavController) {
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentEmerald)
             ) {
-                Icon(Icons.Default.PlayArrow, contentDescription = null, tint = AccentEmerald)
+                Icon(Icons.Default.ArrowForward, contentDescription = null, tint = AccentEmerald)
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "SIMULATE LIVE DEMO TEST",
@@ -252,7 +252,7 @@ fun DashboardScreen(navController: NavController) {
             AlertDialog(
                 onDismissRequest = { showDemoDialog = false },
                 containerColor = CardNavy,
-                titleColor = TextWhite,
+                titleContentColor = TextWhite,
                 textContentColor = TextWhite,
                 title = {
                     Text(

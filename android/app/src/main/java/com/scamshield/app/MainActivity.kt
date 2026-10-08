@@ -33,12 +33,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         // If app was already open in background and threat notification clicked
-        val threatId = intent?.getLongExtra("EXTRA_THREAT_ID", -1L)
-        if (threatId != null && threatId != -1L) {
+        val threatId = intent.getLongExtra("EXTRA_THREAT_ID", -1L)
+        if (threatId != -1L) {
             setContent {
                 SCAMSHIELDTheme {
                     val navController = rememberNavController()

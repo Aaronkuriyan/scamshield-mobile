@@ -6,10 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +36,7 @@ fun OnboardingScreen(navController: NavController) {
             Column {
                 Spacer(modifier = Modifier.height(24.dp))
                 Icon(
-                    imageVector = Icons.Default.Shield,
+                    imageVector = Icons.Default.Lock,
                     contentDescription = null,
                     tint = AccentEmerald,
                     modifier = Modifier.size(56.dp)
@@ -63,7 +60,7 @@ fun OnboardingScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 OnboardingFeatureItem(
-                    icon = Icons.Default.NotificationsActive,
+                    icon = Icons.Default.Notifications,
                     title = "Automatic Protection",
                     description = "No copying or pasting required. SCAMSHIELD alerts you the moment a dangerous message arrives."
                 )
