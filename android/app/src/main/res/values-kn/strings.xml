@@ -25,6 +25,8 @@
     <string name="permission_desc">ಸಂದೇಶಗಳನ್ನು ಕಾಪಿ-ಪೇಸ್ಟ್ ಮಾಡದೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಕ್ಷಿಸಲು, SCAMSHIELD ಗೆ ನೋಟಿಫಿಕೇಶನ್ ಪ್ರವೇಶ ಅಗತ್ಯವಿದೆ.</string>
     <string name="btn_enable_protection">ರಕ್ಷಣೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
     <string name="btn_continue_to_app">SCAMSHIELD ಗೆ ಮುಂದುವರಿಯಿರಿ</string>
+    <string name="permission_how_it_works_title">ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ:</string>
+    <string name="permission_how_it_works_desc">1. ಸಂದೇಶ ನೋಟಿಫಿಕೇಶನ್ ಬಂದಾಗ, SCAMSHIELD ಅದನ್ನು ತಕ್ಷಣ ಪರಿಶೀಲಿಸುತ್ತದೆ.\n\n2. ಅದು ನಿಮ್ಮ OTP, ಹಣ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಕದಿಯಲು ಯತ್ನಿಸಿದರೆ, ತಕ್ಷಣ ಎಚ್ಚರಿಕೆ ನೀಡುತ್ತದೆ.\n\n3. ಅಪಾಯಕಾರಿ ಲಿಂಕ್ ಕ್ಲಿಕ್ ಮಾಡುವ ಮುನ್ನವೇ ನಿಮ್ಮನ್ನು ರಕ್ಷಿಸಲಾಗುತ್ತದೆ.</string>
 
     <!-- Dashboard & Message Protection Inbox -->
     <string name="status_protected">ರಕ್ಷಣೆ ಸಕ್ರಿಯವಾಗಿದೆ</string>
@@ -42,11 +44,23 @@
     <string name="risk_suspicious">ಸಂಶಯಾಸ್ಪದ</string>
     <string name="risk_safe">ಸುರಕ್ಷಿತ</string>
     <string name="risk_score_label">ಅಪಾಯ</string>
+    <string name="btn_view_analysis">ವಿಶ್ಲೇಷಣೆ ನೋಡಿ</string>
 
     <string name="empty_inbox_title">ಇನ್ನೂ ಯಾವುದೇ ಸಂದೇಶಗಳನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗಿಲ್ಲ</string>
     <string name="empty_inbox_desc">ರಕ್ಷಣೆ ಆನ್ ಆಗಿರುವಾಗ ಬರುವ ಸಂದೇಶ ನೋಟಿಫಿಕೇಶನ್‌ಗಳನ್ನು SCAMSHIELD ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪರಿಶೀಲಿಸುತ್ತದೆ.</string>
     <string name="empty_threats_title">ನೀವು ಸುರಕ್ಷಿತವಾಗಿದ್ದೀರಿ</string>
     <string name="empty_threats_desc">ಯಾವುದೇ ಸಂಶಯಾಸ್ಪದ ಅಥವಾ ವಂಚನೆಯ ಸಂದೇಶಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
+
+    <!-- Theme Toggle Actions -->
+    <string name="action_switch_to_light">ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ</string>
+    <string name="action_switch_to_dark">ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ</string>
+
+    <!-- Relative Time Formats -->
+    <string name="time_just_now">ಈಗಷ್ಟೇ</string>
+    <string name="time_min_ago">%1$d ನಿಮಿಷದ ಹಿಂದೆ</string>
+    <string name="time_today">ಇಂದು • %1$s</string>
+    <string name="time_yesterday">ನಿನ್ನೆ • %1$s</string>
+    <string name="app_messages">ಸಂದೇಶಗಳು</string>
 
     <!-- Message Details & Analysis -->
     <string name="details_title">ವಿವರವಾದ ಅಪಾಯ ವಿಶ್ಲೇಷಣೆ</string>
@@ -58,22 +72,49 @@
     <string name="safe_action">ನೀವು ಸಾಮಾನ್ಯವಾಗಿ ಮುಂದುವರಿಯಬಹುದು.</string>
     <string name="btn_back">ಹಿಂದೆ</string>
     <string name="btn_call_helpline">ಸೈಬರ್ ಸಹಾಯವಾಣಿಗೆ ಕರೆ ಮಾಡಿ (1930)</string>
+    <string name="threat_not_found_title">ಬೆದರಿಕೆ ದಾಖಲೆ ಕಂಡುಬಂದಿಲ್ಲ</string>
+    <string name="threat_not_found_desc">ಈ ಸ್ಕ್ಯಾನ್ ದಾಖಲೆ ಇನ್ನು ಲಭ್ಯವಿಲ್ಲ ಅಥವಾ ಅಳಿಸಲಾಗಿದೆ.</string>
+    <string name="btn_back_to_inbox">ಇನ್‌ಬಾಕ್ಸ್‌ಗೆ ಹಿಂತಿರುಗಿ</string>
 
     <!-- Settings -->
     <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="setting_language_header">ಭಾಷೆ</string>
     <string name="setting_language">ಅಪ್ಲಿಕೇಶನ್ ಭಾಷೆ</string>
     <string name="setting_language_desc">ಭಾಷೆಯನ್ನು ಬದಲಾಯಿಸಿ (English, ಕನ್ನಡ, हिन्दी)</string>
+    <string name="settings_section_realtime">ನೈಜ ಸಮಯದ ರಕ್ಷಣೆ</string>
+    <string name="setting_monitoring_title">ಸಕ್ರಿಯ ಸಂದೇಶ ಮೇಲ್ವಿಚಾರಣೆ</string>
+    <string name="setting_monitoring_desc">ಬರುವ ಸಂದೇಶ ನೋಟಿಫಿಕೇಶನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪರಿಶೀಲಿಸುತ್ತದೆ</string>
+    <string name="setting_permission_title">ಸಿಸ್ಟಮ್ ನೋಟಿಫಿಕೇಶನ್ ಅನುಮತಿ</string>
+    <string name="status_granted">ಅನುಮತಿಸಲಾಗಿದೆ (ಸಕ್ರಿಯ)</string>
+    <string name="status_not_granted">ಕ್ರಮ ಅಗತ್ಯ: ಅನುಮತಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
+    <string name="settings_section_audio">ಧ್ವನಿ ಮತ್ತು ಪ್ರವೇಶಿಸುವಿಕೆ</string>
     <string name="setting_voice_alert">ಧ್ವನಿ ಎಚ್ಚರಿಕೆ (Text-to-Speech)</string>
     <string name="setting_voice_alert_desc">ಹೆಚ್ಚಿನ ಅಪಾಯದ ವಂಚನೆ ಪತ್ತೆಯಾದಾಗ ಗಟ್ಟಿಯಾಗಿ ಎಚ್ಚರಿಕೆ ಸೂಚನೆಗಳನ್ನು ಓದಿ ಹೇಳಿ.</string>
+    <string name="settings_section_privacy">ಗೌಪ್ಯತೆ ಮತ್ತು ಭದ್ರತೆ</string>
     <string name="setting_privacy_title">ಗೌಪ್ಯತೆ ಹೇಳಿಕೆ</string>
     <string name="setting_privacy_desc">SCAMSHIELD ಸಂಶಯಾಸ್ಪದ ಸಂದೇಶಗಳನ್ನು ಗುರುತಿಸಲು ಆಂಡ್ರಾಯ್ಡ್ ಬೆಂಬಲಿತ ನೋಟಿಫಿಕೇಶನ್ ಪ್ರವೇಶವನ್ನು ಬಳಸುತ್ತದೆ. ಸಾಮಾನ್ಯ ಸಂದೇಶಗಳು ಖಾಸಗಿಯಾಗಿ ಉಳಿಯುತ್ತವೆ.</string>
+    <string name="settings_section_data">ಡೇಟಾ ನಿರ್ವಹಣೆ</string>
     <string name="setting_backend_url">ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್ URL</string>
     <string name="setting_clear_history">ಎಲ್ಲಾ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
     <string name="btn_simulate_demo">ಲೈವ್ ಡೆಮೊ ಪರೀಕ್ಷಿಸಿ</string>
     <string name="btn_safety_guide">ಹಿರಿಯರಿಗಾಗಿ ಸುರಕ್ಷತಾ ಮಾರ್ಗದರ್ಶಿ</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_clear_title">ಎಲ್ಲಾ ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಬೇಕೇ?</string>
+    <string name="dialog_clear_desc">ಇದು ಸ್ಥಳೀಯ ಸಂಗ್ರಹಣೆಯಿಂದ ಎಲ್ಲಾ ವಿಶ್ಲೇಷಿಸಲಾದ ಸಂದೇಶ ಲಾಗ್‌ಗಳನ್ನು ಶಾಶ್ವತವಾಗಿ ತೆಗೆದುಹಾಕುತ್ತದೆ.</string>
+    <string name="dialog_api_url_title">ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್ URL</string>
+    <string name="dialog_api_url_desc">ನಿಮ್ಮ ಚಾಲನೆಯಲ್ಲಿರುವ ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್‌ನ IP/URL ಅನ್ನು ನಮೂದಿಸಿ:</string>
+    <string name="btn_save">ಉಳಿಸಿ</string>
+    <string name="btn_cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="btn_clear">ಅಳಿಸಿ</string>
+    <string name="btn_close">ಮುಚ್ಚಿ</string>
+
+    <!-- Demo Simulator Dialog -->
+    <string name="demo_dialog_title">ಲೈವ್ ಪರೀಕ್ಷಾ ಸನ್ನಿವೇಶಗಳು</string>
+    <string name="demo_dialog_desc">ಕಾಪಿ-ಪೇಸ್ಟ್ ಮಾಡದೆ ಸ್ವಯಂಚಾಲಿತ ನೋಟಿಫಿಕೇಶನ್ ಪತ್ತೆಯನ್ನು ಪರೀಕ್ಷಿಸಲು ಸನ್ನಿವೇಶವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ:</string>
+
     <!-- Appearance & Theme -->
-    <string name="setting_appearance">ನೋಟ (APPEARANCE)</string>
+    <string name="setting_appearance">ನೋಟ (ಥೀಮ್)</string>
     <string name="theme_title">ಥೀಮ್</string>
     <string name="theme_system">ಸಿಸ್ಟಮ್ ಡೀಫಾಲ್ಟ್</string>
     <string name="theme_light">ಲೈಟ್ ಮೋಡ್ (Light)</string>
@@ -86,4 +127,45 @@
     <string name="nav_protection">ರಕ್ಷಣೆ</string>
     <string name="nav_safety">ಸುರಕ್ಷತೆ</string>
     <string name="nav_settings">ಸೆಟ್ಟಿಂಗ್ಸ್</string>
+
+    <!-- Safety Guide Screen -->
+    <string name="safety_guide_title">ಸುರಕ್ಷತಾ ಮಾರ್ಗದರ್ಶಿ</string>
+    <string name="safety_guide_subtitle">ಸಂದೇಶ ವಂಚನೆಗಳಿಂದ ನಿಮ್ಮನ್ನು ಮತ್ತು ನಿಮ್ಮ ಕುಟುಂಬವನ್ನು ರಕ್ಷಿಸಲು ಸರಳ ನಿಯಮಗಳು:</string>
+    <string name="safety_rule_prefix">ನಿಯಮ: %1$s</string>
+    <string name="safety_example_label">ಉದಾಹರಣೆ ವಂಚನೆ ಸಂದೇಶ:</string>
+    <string name="safety_why_dangerous_label">ಇದು ಏಕೆ ಅಪಾಯಕಾರಿ:</string>
+
+    <!-- Family Protection Screen -->
+    <string name="family_title">ಕುಟುಂಬ ರಕ್ಷಣೆ</string>
+    <string name="family_protect_card_title">ಪೋಷಕರನ್ನು ರಕ್ಷಿಸಿ</string>
+    <string name="family_protect_card_desc">ಹಿರಿಯ ಪೋಷಕರಿಗೆ ಹೆಚ್ಚಿನ ಅಪಾಯದ ವಂಚನೆ ಅಥವಾ ಹಣ ಪಾವತಿ ಸಂದೇಶ ಬಂದಾಗ, ಹಣ ಕಳೆದುಕೊಳ್ಳುವ ಮುನ್ನವೇ ಕುಟುಂಬದ ಸದಸ್ಯರಿಗೆ ಎಚ್ಚರಿಕೆ ರವಾನಿಸಬಹುದು.</string>
+    <string name="family_enable_switch">ಕುಟುಂಬ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಆನ್ ಮಾಡಿ</string>
+    <string name="family_contact_card_title">ವಿಶ್ವಾಸಾರ್ಹ ಕುಟುಂಬದ ಸಂಪರ್ಕ</string>
+    <string name="family_name_label">ಸಂಪರ್ಕದ ಹೆಸರು (ಉದಾ. ಮಗ, ಮಗಳು)</string>
+    <string name="family_phone_label">ದೂರವಾಣಿ ಸಂಖ್ಯೆ</string>
+    <string name="family_btn_save">ಸಂಪರ್ಕವನ್ನು ಉಳಿಸಿ</string>
+    <string name="family_saved_success">✓ ವಿಶ್ವಾಸಾರ್ಹ ಸಂಪರ್ಕವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ.</string>
+    <string name="family_privacy_notice">ಸಂಪೂರ್ಣ ಗೌಪ್ಯತೆ: ಕುಟುಂಬದ ಸದಸ್ಯರಿಗೆ ಸಂದೇಶದ ವೈಯಕ್ತಿಕ ವಿವರಗಳನ್ನು ತೋರಿಸಲಾಗುವುದಿಲ್ಲ. ಕೇವಲ \'ನಿಮ್ಮ ಪೋಷಕರಿಗೆ ಅಪಾಯಕಾರಿ ವಂಚನೆ ಎಚ್ಚರಿಕೆ ಬಂದಿದೆ\' ಎಂಬ ಸೂಚನೆ ಮಾತ್ರ ಹೋಗುತ್ತದೆ.</string>
+
+    <!-- History Screen -->
+    <string name="history_title">ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸ</string>
+    <string name="history_empty_title">ಇನ್ನೂ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.</string>
+    <string name="history_empty_desc">ಬರುವ ಸಂದೇಶ ನೋಟಿಫಿಕೇಶನ್‌ಗಳು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ.</string>
+    <string name="history_dialog_clear_title">ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸ ಅಳಿಸಬೇಕೇ?</string>
+    <string name="history_dialog_clear_desc">ಎಲ್ಲಾ ಸ್ಥಳೀಯ ಸ್ಕ್ಯಾನ್ ದಾಖಲೆಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ರಕ್ಷಣೆ ಸಕ್ರಿಯವಾಗಿ ಉಳಿಯುತ್ತದೆ.</string>
+    <string name="history_btn_view">ನೋಡಿ →</string>
+
+    <!-- Scam Categories Localized -->
+    <string name="category_upi_scam">UPI ವಂಚನೆ</string>
+    <string name="category_fake_kyc">ನಕಲಿ KYC ನವೀಕರಣ</string>
+    <string name="category_phishing">OTP ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ಕಳ್ಳತನ</string>
+    <string name="category_account_suspension">ಖಾತೆ ನಿರ್ಬಂಧಿಸುವ ವಂಚನೆ</string>
+    <string name="category_gov_impersonation">ಸರ್ಕಾರಿ / ವಿದ್ಯುತ್ ಬಿಲ್ ವಂಚನೆ</string>
+    <string name="category_lottery_prize">ನಕಲಿ ಲಾಟರಿ / ಬಹುಮಾನ ವಂಚನೆ</string>
+    <string name="category_remote_access">ರಿಮೋಟ್ ಸ್ಕ್ರೀನ್-ಶೇರಿಂಗ್ ವಂಚನೆ</string>
+    <string name="category_delivery_scam">ನಕಲಿ ಪಾರ್ಸೆಲ್ / ಡೆಲಿವರಿ ವಂಚನೆ</string>
+    <string name="category_malicious_link">ಅಪಾಯಕಾರಿ ವೆಬ್ ಲಿಂಕ್</string>
+    <string name="category_social_engineering">ಮಾನಸಿಕ ಒತ್ತಡದ ವಂಚನೆ</string>
+    <string name="category_safe_normal">ಸುರಕ್ಷಿತ / ಸಾಮಾನ್ಯ ಸಂದೇಶ</string>
+    <string name="category_general_suspicious">ಸಂಶಯಾಸ್ಪದ ಸಂದೇಶ</string>
 </resources>

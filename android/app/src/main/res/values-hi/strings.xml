@@ -25,6 +25,8 @@
     <string name="permission_desc">संदेशों को कॉपी-पेस्ट किए बिना स्वचालित रूप से सुरक्षा प्रदान करने के लिए, SCAMSHIELD को नोटिफिकेशन एक्सेस की आवश्यकता है।</string>
     <string name="btn_enable_protection">सुरक्षा चालू करें</string>
     <string name="btn_continue_to_app">SCAMSHIELD में जाएं</string>
+    <string name="permission_how_it_works_title">यह कैसे काम करता है:</string>
+    <string name="permission_how_it_works_desc">1. संदेश नोटिफिकेशन आते ही SCAMSHIELD तुरंत उसकी जांच करता है।\n\n2. यदि यह OTP, पैसे या पासवर्ड चुराने का प्रयास है, तो तुरंत चेतावनी मिलती है।\n\n3. खतरनाक लिंक पर क्लिक करने से पहले ही आप सतर्क हो जाते हैं।</string>
 
     <!-- Dashboard & Message Protection Inbox -->
     <string name="status_protected">सुरक्षा सक्रिय है</string>
@@ -42,11 +44,23 @@
     <string name="risk_suspicious">संदिग्ध</string>
     <string name="risk_safe">सुरक्षित</string>
     <string name="risk_score_label">जोखिम</string>
+    <string name="btn_view_analysis">विश्लेषण देखें</string>
 
     <string name="empty_inbox_title">अभी तक कोई संदेश जाँचा नहीं गया है</string>
     <string name="empty_inbox_desc">सुरक्षा चालू होने पर SCAMSHIELD आने वाले संदेशों की अपने आप जांच करेगा।</string>
     <string name="empty_threats_title">आप सुरक्षित हैं</string>
     <string name="empty_threats_desc">कोई संदिग्ध या धोखाधड़ी वाला संदेश नहीं मिला।</string>
+
+    <!-- Theme Toggle Actions -->
+    <string name="action_switch_to_light">लाइट मोड में बदलें</string>
+    <string name="action_switch_to_dark">डार्क मोड में बदलें</string>
+
+    <!-- Relative Time Formats -->
+    <string name="time_just_now">अभी-अभी</string>
+    <string name="time_min_ago">%1$d मिनट पहले</string>
+    <string name="time_today">आज • %1$s</string>
+    <string name="time_yesterday">कल • %1$s</string>
+    <string name="app_messages">मैसेज</string>
 
     <!-- Message Details & Analysis -->
     <string name="details_title">विस्तृत खतरा विश्लेषण</string>
@@ -58,22 +72,49 @@
     <string name="safe_action">आप सामान्य रूप से बातचीत जारी रख सकते हैं।</string>
     <string name="btn_back">वापस</string>
     <string name="btn_call_helpline">साइबर हेल्पलाइन पर कॉल करें (1930)</string>
+    <string name="threat_not_found_title">संदेश रिकॉर्ड नहीं मिला</string>
+    <string name="threat_not_found_desc">यह स्कैन रिकॉर्ड अब उपलब्ध नहीं है या हटा दिया गया है।</string>
+    <string name="btn_back_to_inbox">इनबॉक्स में वापस जाएं</string>
 
     <!-- Settings -->
     <string name="settings_title">सेटिंग्स</string>
+    <string name="setting_language_header">भाषा</string>
     <string name="setting_language">ऐप भाषा</string>
     <string name="setting_language_desc">भाषा बदलें (English, ಕನ್ನಡ, हिन्दी)</string>
+    <string name="settings_section_realtime">रीयल-टाइम सुरक्षा</string>
+    <string name="setting_monitoring_title">सक्रिय संदेश निगरानी</string>
+    <string name="setting_monitoring_desc">आने वाले संदेश नोटिफिकेशन की स्वचालित रूप से जांच करता है</string>
+    <string name="setting_permission_title">सिस्टम नोटिफिकेशन अनुमति</string>
+    <string name="status_granted">अनुमति दी गई (सक्रिय)</string>
+    <string name="status_not_granted">कार्रवाई आवश्यक: अनुमति देने के लिए टैप करें</string>
+    <string name="settings_section_audio">ऑडियो और सुलभता</string>
     <string name="setting_voice_alert">आवाज चेतावनी (Text-to-Speech)</string>
     <string name="setting_voice_alert_desc">उच्च जोखिम वाले स्कैम का पता चलने पर चेतावनी पढ़कर सुनाएं।</string>
+    <string name="settings_section_privacy">गोपनीयता और सुरक्षा</string>
     <string name="setting_privacy_title">गोपनीयता विवरण</string>
     <string name="setting_privacy_desc">SCAMSHIELD संदिग्ध संदेशों की पहचान के लिए एंड्रॉइड नोटिफिकेशन का उपयोग करता है। व्यक्तिगत संदेश सुरक्षित और निजी रहते हैं।</string>
+    <string name="settings_section_data">डेटा प्रबंधन</string>
     <string name="setting_backend_url">बैकएंड सर्वर URL</string>
     <string name="setting_clear_history">सभी संदेश इतिहास मिटाएं</string>
     <string name="btn_simulate_demo">लाइव डेमो टेस्ट करें</string>
     <string name="btn_safety_guide">बुजुर्गों के लिए सुरक्षा निर्देश</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_clear_title">सभी संदेश इतिहास मिटाएं?</string>
+    <string name="dialog_clear_desc">यह स्थानीय स्टोरेज से सभी विश्लेषित संदेश लॉग को स्थायी रूप से हटा देगा।</string>
+    <string name="dialog_api_url_title">बैकएंड सर्वर URL</string>
+    <string name="dialog_api_url_desc">चल रहे बैकएंड सर्वर का IP/URL दर्ज करें:</string>
+    <string name="btn_save">सहेजें</string>
+    <string name="btn_cancel">रद्द करें</string>
+    <string name="btn_clear">मिटाएं</string>
+    <string name="btn_close">बंद करें</string>
+
+    <!-- Demo Simulator Dialog -->
+    <string name="demo_dialog_title">लाइव परीक्षण परिदृश्य</string>
+    <string name="demo_dialog_desc">बिना कॉपी-पेस्ट के स्वचालित नोटिफिकेशन जांच का परीक्षण करने के लिए किसी भी विकल्प पर टैप करें:</string>
+
     <!-- Appearance & Theme -->
-    <string name="setting_appearance">स्वरूप (APPEARANCE)</string>
+    <string name="setting_appearance">स्वरूप (थीम)</string>
     <string name="theme_title">थीम</string>
     <string name="theme_system">सिस्टम डिफ़ॉल्ट</string>
     <string name="theme_light">लाइट मोड (Light)</string>
@@ -86,4 +127,45 @@
     <string name="nav_protection">सुरक्षा</string>
     <string name="nav_safety">निर्देश</string>
     <string name="nav_settings">सेटिंग्स</string>
+
+    <!-- Safety Guide Screen -->
+    <string name="safety_guide_title">सुरक्षा निर्देश</string>
+    <string name="safety_guide_subtitle">संदेश धोखाधड़ी से अपने आप को और अपने परिवार को सुरक्षित रखने के सरल नियम:</string>
+    <string name="safety_rule_prefix">नियम: %1$s</string>
+    <string name="safety_example_label">फर्जी संदेश का उदाहरण:</string>
+    <string name="safety_why_dangerous_label">यह खतरनाक क्यों है:</string>
+
+    <!-- Family Protection Screen -->
+    <string name="family_title">पारिवारिक सुरक्षा</string>
+    <string name="family_protect_card_title">माता-पिता की सुरक्षा</string>
+    <string name="family_protect_card_desc">जब किसी बुजुर्ग अभिभावक को उच्च जोखिम वाला धोखाधड़ी या भुगतान संदेश मिलता है, तो पैसे का नुकसान होने से पहले परिवार के सदस्य को तुरंत सतर्क किया जा सकता है।</string>
+    <string name="family_enable_switch">पारिवारिक अलर्ट चालू करें</string>
+    <string name="family_contact_card_title">विश्वसनीय पारिवारिक संपर्क</string>
+    <string name="family_name_label">संपर्क नाम (जैसे बेटा, बेटी)</string>
+    <string name="family_phone_label">फोन नंबर</string>
+    <string name="family_btn_save">संपर्क सुरक्षित करें</string>
+    <string name="family_saved_success">✓ विश्वसनीय संपर्क सफलतापूर्वक सहेजा गया।</string>
+    <string name="family_privacy_notice">पूर्ण गोपनीयता: परिवार के सदस्यों को व्यक्तिगत संदेश सामग्री नहीं दिखाई जाती। केवल एक सूचना भेजी जाती है: \'आपके अभिभावक को एक उच्च जोखिम वाला संदेश मिला है।\'</string>
+
+    <!-- History Screen -->
+    <string name="history_title">स्कैन इतिहास</string>
+    <string name="history_empty_title">अभी तक कोई रिकॉर्ड नहीं है।</string>
+    <string name="history_empty_desc">आने वाले संदेश नोटिफिकेशन अपने आप यहां दिखाई देंगे।</string>
+    <string name="history_dialog_clear_title">स्कैन इतिहास मिटाएं?</string>
+    <string name="history_dialog_clear_desc">सभी स्थानीय स्कैन रिकॉर्ड मिटा दिए जाएंगे। सुरक्षा सक्रिय रहेगी।</string>
+    <string name="history_btn_view">देखें →</string>
+
+    <!-- Scam Categories Localized -->
+    <string name="category_upi_scam">UPI धोखाधड़ी</string>
+    <string name="category_fake_kyc">फर्जी KYC धोखाधड़ी</string>
+    <string name="category_phishing">OTP और पासवर्ड धोखाधड़ी</string>
+    <string name="category_account_suspension">खाता बंद होने की फर्जी धमकी</string>
+    <string name="category_gov_impersonation">सरकारी / बिजली बिल धोखाधड़ी</string>
+    <string name="category_lottery_prize">फर्जी लॉटरी / इनाम धोखाधड़ी</string>
+    <string name="category_remote_access">स्क्रीन-शेयरिंग ऐप धोखाधड़ी</string>
+    <string name="category_delivery_scam">फर्जी पार्सल / डिलीवरी धोखाधड़ी</string>
+    <string name="category_malicious_link">खतरनाक वेबसाइट लिंक</string>
+    <string name="category_social_engineering">दबाव और हड़बड़ी पैदा करने वाला संदेश</string>
+    <string name="category_safe_normal">सुरक्षित / सामान्य संदेश</string>
+    <string name="category_general_suspicious">संदिग्ध संदेश</string>
 </resources>

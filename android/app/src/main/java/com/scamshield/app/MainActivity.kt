@@ -1,10 +1,13 @@
 package com.scamshield.app
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
+import com.scamshield.app.service.ScamNotificationListenerService
 import com.scamshield.app.ui.navigation.ScamShieldNavGraph
 import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.SCAMSHIELDTheme
@@ -18,6 +21,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Ensure notification listener service is bound
+        ScamNotificationListenerService.ensureServiceBound(this)
+
+        // Request runtime permissions for SMS and Notifications if needed
+        requestRequiredRuntimePermissions()
+
         // Check if opened from threat notification
         val threatId = if (intent?.action == "com.scamshield.app.ACTION_VIEW_THREAT") {
             val id = intent.getLongExtra("EXTRA_THREAT_ID", -1L)
@@ -27,6 +36,11 @@ class MainActivity : ComponentActivity() {
         }
 
         com.scamshield.app.util.ThemeManager.init(this)
+
+        val langExtra = intent?.getStringExtra("EXTRA_LANGUAGE")
+        if (langExtra != null) {
+            com.scamshield.app.util.LocaleHelper.setLanguage(this, langExtra)
+        }
 
         val themeModeExtra = intent?.getStringExtra("EXTRA_THEME_MODE")
         if (themeModeExtra != null) {
@@ -62,9 +76,42 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Re-confirm service is bound whenever app returns to foreground
+        ScamNotificationListenerService.ensureServiceBound(this)
+    }
+
+    private fun requestRequiredRuntimePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val permissionsToRequest = mutableListOf<String>()
+
+            if (checkSelfPermission(android.Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(android.Manifest.permission.RECEIVE_SMS)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsToRequest.add(android.Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+
+            if (permissionsToRequest.isNotEmpty()) {
+                requestPermissions(permissionsToRequest.toTypedArray(), 1001)
+            }
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+
+        val langExtra = intent.getStringExtra("EXTRA_LANGUAGE")
+        if (langExtra != null) {
+            com.scamshield.app.util.LocaleHelper.setLanguage(this, langExtra)
+            recreate()
+            return
+        }
 
         val themeModeExtra = intent.getStringExtra("EXTRA_THEME_MODE")
         if (themeModeExtra != null) {

@@ -176,7 +176,7 @@ fun SettingsScreen(navController: NavController) {
 
             // Section: Language Preference
             Text(
-                text = "LANGUAGE",
+                text = stringResource(R.string.setting_language_header),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -223,7 +223,7 @@ fun SettingsScreen(navController: NavController) {
 
             // Section: Real-time Protection
             Text(
-                text = "REAL-TIME PROTECTION",
+                text = stringResource(R.string.settings_section_realtime),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -245,14 +245,14 @@ fun SettingsScreen(navController: NavController) {
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "Active Message Monitoring",
+                                text = stringResource(R.string.setting_monitoring_title),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = "Automatically checks incoming message notifications",
+                                text = stringResource(R.string.setting_monitoring_desc),
                                 fontSize = 13.sp,
                                 color = AppTheme.colors.textSecondary
                             )
@@ -283,14 +283,14 @@ fun SettingsScreen(navController: NavController) {
                     ) {
                         Column {
                             Text(
-                                text = "System Notification Permission",
+                                text = stringResource(R.string.setting_permission_title),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = if (isNotificationServiceEnabled(context)) "Granted" else "Action Needed: Tap to allow",
+                                text = if (isNotificationServiceEnabled(context)) stringResource(R.string.status_granted) else stringResource(R.string.status_not_granted),
                                 fontSize = 13.sp,
                                 color = if (isNotificationServiceEnabled(context)) AccentEmerald else CautionAmber
                             )
@@ -304,7 +304,7 @@ fun SettingsScreen(navController: NavController) {
 
             // Section: Audio & Voice Warnings
             Text(
-                text = "AUDIO & ACCESSIBILITY",
+                text = stringResource(R.string.settings_section_audio),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -357,7 +357,7 @@ fun SettingsScreen(navController: NavController) {
 
             // Section: Privacy Statement
             Text(
-                text = "PRIVACY & SECURITY",
+                text = stringResource(R.string.settings_section_privacy),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -401,7 +401,7 @@ fun SettingsScreen(navController: NavController) {
 
             // Section: Data & Reset
             Text(
-                text = "DATA MANAGEMENT",
+                text = stringResource(R.string.settings_section_data),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = AccentEmerald,
@@ -490,7 +490,7 @@ fun SettingsScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "AI-powered scam protection.",
+                        text = stringResource(R.string.app_tagline),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = AccentEmerald
@@ -534,6 +534,7 @@ fun SettingsScreen(navController: NavController) {
                                         currentLanguage = code
                                         LocaleHelper.setLanguage(context, code)
                                         showLanguageDialog = false
+                                        (context as? android.app.Activity)?.recreate()
                                     },
                                 colors = CardDefaults.cardColors(
                                     containerColor = if (isSelected) {
@@ -573,7 +574,7 @@ fun SettingsScreen(navController: NavController) {
                 },
                 confirmButton = {
                     TextButton(onClick = { showLanguageDialog = false }) {
-                        Text("CLOSE", color = AccentEmerald, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_close), color = AccentEmerald, fontWeight = FontWeight.Bold)
                     }
                 }
             )
@@ -586,8 +587,8 @@ fun SettingsScreen(navController: NavController) {
                 containerColor = AppTheme.colors.surface,
                 titleContentColor = AlertCrimson,
                 textContentColor = AppTheme.colors.textPrimary,
-                title = { Text("Clear All Scan History?") },
-                text = { Text("This will permanently remove all analyzed message logs from local storage.") },
+                title = { Text(stringResource(R.string.dialog_clear_title)) },
+                text = { Text(stringResource(R.string.dialog_clear_desc)) },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -597,12 +598,12 @@ fun SettingsScreen(navController: NavController) {
                             }
                         }
                     ) {
-                        Text("CLEAR", color = AlertCrimson, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_clear), color = AlertCrimson, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showClearConfirm = false }) {
-                        Text("CANCEL", color = AppTheme.colors.textSecondary)
+                        Text(stringResource(R.string.btn_cancel), color = AppTheme.colors.textSecondary)
                     }
                 }
             )
@@ -616,10 +617,10 @@ fun SettingsScreen(navController: NavController) {
                 containerColor = AppTheme.colors.surface,
                 titleContentColor = AppTheme.colors.textPrimary,
                 textContentColor = AppTheme.colors.textPrimary,
-                title = { Text("Backend Server URL") },
+                title = { Text(stringResource(R.string.dialog_api_url_title)) },
                 text = {
                     Column {
-                        Text("Set the IP/URL of your running FastAPI service:", fontSize = 13.sp, color = AppTheme.colors.textSecondary)
+                        Text(stringResource(R.string.dialog_api_url_desc), fontSize = 13.sp, color = AppTheme.colors.textSecondary)
                         Spacer(modifier = Modifier.height(10.dp))
                         OutlinedTextField(
                             value = tempUrl,
@@ -642,12 +643,12 @@ fun SettingsScreen(navController: NavController) {
                             showEditUrlDialog = false
                         }
                     ) {
-                        Text("SAVE", color = AccentEmerald, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_save), color = AccentEmerald, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showEditUrlDialog = false }) {
-                        Text("CANCEL", color = AppTheme.colors.textSecondary)
+                        Text(stringResource(R.string.btn_cancel), color = AppTheme.colors.textSecondary)
                     }
                 }
             )

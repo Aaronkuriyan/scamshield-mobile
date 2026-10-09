@@ -29,6 +29,7 @@ import com.scamshield.app.data.repository.ScanRepository
 import com.scamshield.app.engine.LocalScamFilter
 import com.scamshield.app.ui.theme.*
 import com.scamshield.app.util.AppFormatters
+import com.scamshield.app.util.LocalizationHelper
 
 @Composable
 fun ThreatDetailScreen(
@@ -81,21 +82,32 @@ fun ThreatDetailScreen(
                 AppFormatters.getSourceAppName(context, threat.sourcePackage)
             }
             val formattedTime = remember(threat.timestamp) {
-                AppFormatters.formatRelativeTime(threat.timestamp)
+                AppFormatters.formatRelativeTime(context, threat.timestamp)
+            }
+
+            val localizedCategory = remember(threat.category) {
+                LocalizationHelper.getLocalizedCategory(context, threat.category)
+            }
+
+            val localizedRecommendation = remember(threat.recommendation, threat.category, threat.classification) {
+                LocalizationHelper.getLocalizedRecommendation(context, threat.recommendation, threat.category, threat.classification)
             }
 
             val indicatorsList = remember(threat.indicatorsCsv) {
-                threat.indicatorsCsv.split(" • ").filter { it.isNotBlank() }
+                val raw = threat.indicatorsCsv.split(" • ").filter { it.isNotBlank() }
+                LocalizationHelper.getLocalizedIndicators(context, raw)
             }
 
             val whatToDoList = remember(threat.whatToDoCsv, threat.category, threat.classification) {
                 val parsed = threat.whatToDoCsv.split(" | ").filter { it.isNotBlank() }
-                if (parsed.isNotEmpty()) parsed else LocalScamFilter.generateWhatToDo(threat.category, threat.classification)
+                val raw = if (parsed.isNotEmpty()) parsed else LocalScamFilter.generateWhatToDo(threat.category, threat.classification)
+                LocalizationHelper.getLocalizedWhatToDo(context, threat.category, threat.classification, raw)
             }
 
             val whatNotToDoList = remember(threat.whatNotToDoCsv, threat.category, threat.classification) {
                 val parsed = threat.whatNotToDoCsv.split(" | ").filter { it.isNotBlank() }
-                if (parsed.isNotEmpty()) parsed else LocalScamFilter.generateWhatNotToDo(threat.category, threat.classification)
+                val raw = if (parsed.isNotEmpty()) parsed else LocalScamFilter.generateWhatNotToDo(threat.category, threat.classification)
+                LocalizationHelper.getLocalizedWhatNotToDo(context, threat.category, threat.classification, raw)
             }
 
             val heroBgColor = if (AppTheme.colors.isDark) {
@@ -197,7 +209,7 @@ fun ThreatDetailScreen(
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Text(
-                                text = threat.category,
+                                text = localizedCategory,
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = AppTheme.colors.textPrimary
@@ -206,7 +218,7 @@ fun ThreatDetailScreen(
                             Spacer(modifier = Modifier.height(6.dp))
 
                             Text(
-                                text = threat.recommendation,
+                                text = localizedRecommendation,
                                 fontSize = 15.sp,
                                 color = AppTheme.colors.textSecondary,
                                 lineHeight = 22.sp
@@ -499,14 +511,14 @@ fun ThreatDetailScreen(
                         modifier = Modifier.padding(24.dp)
                     ) {
                         Text(
-                            text = "Threat Record Not Found",
+                            text = stringResource(R.string.threat_not_found_title),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppTheme.colors.textPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "This scan record is no longer available or was cleared.",
+                            text = stringResource(R.string.threat_not_found_desc),
                             fontSize = 14.sp,
                             color = AppTheme.colors.textSecondary,
                             textAlign = TextAlign.Center
@@ -516,7 +528,7 @@ fun ThreatDetailScreen(
                             onClick = { navController.popBackStack() },
                             colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.primary)
                         ) {
-                            Text("Back to Inbox", color = Color.White)
+                            Text(stringResource(R.string.btn_back_to_inbox), color = Color.White)
                         }
                     }
                 }

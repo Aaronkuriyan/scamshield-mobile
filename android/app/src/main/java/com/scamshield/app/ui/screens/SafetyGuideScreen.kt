@@ -14,8 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.ui.theme.*
+import com.scamshield.app.util.LocalizationHelper
 
 data class SafetyTopic(
     val title: String,
@@ -77,6 +81,9 @@ val SAFETY_TOPICS = listOf(
 
 @Composable
 fun SafetyGuideScreen(navController: NavController) {
+    val context = LocalContext.current
+    val topics = remember(context) { LocalizationHelper.getSafetyTopics(context) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = AppTheme.colors.background
@@ -93,11 +100,11 @@ fun SafetyGuideScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = AppTheme.colors.textPrimary)
+                    Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.btn_back), tint = AppTheme.colors.textPrimary)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Safety Guide",
+                    text = stringResource(R.string.safety_guide_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.textPrimary
@@ -105,7 +112,7 @@ fun SafetyGuideScreen(navController: NavController) {
             }
 
             Text(
-                text = "Simple rules to keep you and your family safe from message scams:",
+                text = stringResource(R.string.safety_guide_subtitle),
                 fontSize = 16.sp,
                 color = AppTheme.colors.textSecondary,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -115,7 +122,7 @@ fun SafetyGuideScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(14.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(SAFETY_TOPICS) { topic ->
+                items(topics) { topic ->
                     SafetyTopicCard(topic)
                 }
             }
@@ -158,7 +165,7 @@ fun SafetyTopicCard(topic: SafetyTopic) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Rule: ${topic.rule}",
+                text = stringResource(R.string.safety_rule_prefix, topic.rule),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = AccentEmerald
@@ -168,7 +175,7 @@ fun SafetyTopicCard(topic: SafetyTopic) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
-                    text = "Example Scam Message:",
+                    text = stringResource(R.string.safety_example_label),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = AlertCrimson
@@ -192,7 +199,7 @@ fun SafetyTopicCard(topic: SafetyTopic) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Why this is dangerous:",
+                    text = stringResource(R.string.safety_why_dangerous_label),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.textPrimary

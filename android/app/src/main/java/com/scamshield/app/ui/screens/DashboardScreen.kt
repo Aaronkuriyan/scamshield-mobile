@@ -34,6 +34,9 @@ import com.scamshield.app.ui.navigation.Screen
 import com.scamshield.app.ui.theme.*
 import com.scamshield.app.util.AppFormatters
 import com.scamshield.app.util.DemoSimulator
+import com.scamshield.app.util.AppThemeMode
+import com.scamshield.app.util.ThemeManager
+import com.scamshield.app.util.LocalizationHelper
 import kotlinx.coroutines.launch
 
 enum class InboxFilter {
@@ -210,15 +213,22 @@ fun DashboardScreen(navController: NavController) {
                     }
                 }
 
-                Row {
-                    IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.settings_title),
-                            tint = AppTheme.colors.textPrimary,
-                            modifier = Modifier.size(26.dp)
-                        )
-                    }
+                // Quick Theme Toggle (Top-right Settings icon removed; Settings is accessed exclusively via bottom navigation)
+                IconButton(
+                    onClick = {
+                        val newMode = if (isDark) AppThemeMode.LIGHT else AppThemeMode.DARK
+                        ThemeManager.setThemeMode(context, newMode)
+                    },
+                    modifier = Modifier.size(44.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
+                        contentDescription = stringResource(
+                            if (isDark) R.string.action_switch_to_light else R.string.action_switch_to_dark
+                        ),
+                        tint = if (isDark) Color(0xFFFBBF24) else Color(0xFF475569),
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
             }
 
@@ -419,7 +429,7 @@ fun DashboardScreen(navController: NavController) {
                 textContentColor = AppTheme.colors.textSecondary,
                 title = {
                     Text(
-                        text = "Live Mentor Test Scenarios",
+                        text = stringResource(R.string.demo_dialog_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -429,7 +439,7 @@ fun DashboardScreen(navController: NavController) {
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Text(
-                            text = "Tap a scenario to test automatic notification detection without copy-pasting:",
+                            text = stringResource(R.string.demo_dialog_desc),
                             fontSize = 14.sp,
                             color = AppTheme.colors.textSecondary
                         )
@@ -464,8 +474,13 @@ fun DashboardScreen(navController: NavController) {
                                             testCase.expectedType.contains("SUSPICIOUS", ignoreCase = true) -> CautionAmber
                                             else -> AccentEmerald
                                         }
+                                        val expectedTypeLabel = when {
+                                            testCase.expectedType.contains("HIGH", ignoreCase = true) -> stringResource(R.string.risk_high)
+                                            testCase.expectedType.contains("SUSPICIOUS", ignoreCase = true) -> stringResource(R.string.risk_suspicious)
+                                            else -> stringResource(R.string.risk_safe)
+                                        }
                                         Text(
-                                            text = testCase.expectedType,
+                                            text = expectedTypeLabel,
                                             fontSize = 11.sp,
                                             color = badgeColor,
                                             fontWeight = FontWeight.Bold
@@ -486,7 +501,7 @@ fun DashboardScreen(navController: NavController) {
                 },
                 confirmButton = {
                     TextButton(onClick = { showDemoDialog = false }) {
-                        Text("CLOSE", color = AccentEmerald, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_close), color = AccentEmerald, fontWeight = FontWeight.Bold)
                     }
                 }
             )
@@ -577,7 +592,11 @@ fun MessageItemCard(
     }
 
     val relativeTime = remember(message.timestamp) {
-        AppFormatters.formatRelativeTime(message.timestamp)
+        AppFormatters.formatRelativeTime(context, message.timestamp)
+    }
+
+    val localizedCategory = remember(message.category) {
+        LocalizationHelper.getLocalizedCategory(context, message.category)
     }
 
     Card(
@@ -634,7 +653,7 @@ fun MessageItemCard(
 
             // Scam Category Title
             Text(
-                text = message.category,
+                text = localizedCategory,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
                 color = AppTheme.colors.textPrimary
@@ -681,7 +700,7 @@ fun MessageItemCard(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "VIEW ANALYSIS",
+                        text = stringResource(R.string.btn_view_analysis),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = themeColor
