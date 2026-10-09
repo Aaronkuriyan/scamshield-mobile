@@ -15,7 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.scamshield.app.R
 import com.scamshield.app.ui.theme.*
 
 @Composable
@@ -52,11 +54,11 @@ fun FamilyProtectionScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = AppTheme.colors.textPrimary)
+                    Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.btn_back), tint = AppTheme.colors.textPrimary)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Family Protection",
+                    text = stringResource(R.string.family_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppTheme.colors.textPrimary
@@ -79,7 +81,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Protect Your Parents",
+                            text = stringResource(R.string.family_protect_card_title),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppTheme.colors.textPrimary
@@ -89,7 +91,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "When an elderly parent receives a confirmed high-risk scam or fraudulent payment demand, SCAMSHIELD can notify a designated family member so they can intervene before money is lost.",
+                        text = stringResource(R.string.family_protect_card_desc),
                         fontSize = 15.sp,
                         color = AppTheme.colors.textSecondary,
                         lineHeight = 22.sp
@@ -103,7 +105,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Enable Family Alerts",
+                            text = stringResource(R.string.family_enable_switch),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = AppTheme.colors.textPrimary
@@ -134,7 +136,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text(
-                            text = "Trusted Family Contact",
+                            text = stringResource(R.string.family_contact_card_title),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppTheme.colors.textPrimary
@@ -144,7 +146,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                         OutlinedTextField(
                             value = trustedName,
                             onValueChange = { trustedName = it },
-                            label = { Text("Contact Name (e.g. Son, Daughter)") },
+                            label = { Text(stringResource(R.string.family_name_label)) },
                             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = AccentEmerald) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
@@ -161,7 +163,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                         OutlinedTextField(
                             value = trustedPhone,
                             onValueChange = { trustedPhone = it },
-                            label = { Text("Phone Number") },
+                            label = { Text(stringResource(R.string.family_phone_label)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -189,7 +191,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                             colors = ButtonDefaults.buttonColors(containerColor = AccentEmerald)
                         ) {
                             Text(
-                                "SAVE TRUSTED CONTACT",
+                                text = stringResource(R.string.family_btn_save),
                                 fontWeight = FontWeight.Bold,
                                 color = if (AppTheme.colors.isDark) SurfaceDark else androidx.compose.ui.graphics.Color(0xFF0F172A)
                             )
@@ -198,7 +200,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                         if (savedMessage) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "✓ Trusted contact updated successfully.",
+                                text = stringResource(R.string.family_saved_success),
                                 color = AccentEmerald,
                                 fontSize = 14.sp
                             )
@@ -228,7 +230,7 @@ fun FamilyProtectionScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Zero Surveillance: Family members are never shown message chats or personal text. They only receive a safety notice: 'Your parent received a high-risk scam alert.'",
+                        text = stringResource(R.string.family_privacy_notice),
                         fontSize = 13.sp,
                         color = AppTheme.colors.textSecondary,
                         lineHeight = 19.sp

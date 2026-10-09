@@ -83,7 +83,7 @@ fun SplashScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "AI-powered scam protection",
+                text = androidx.compose.ui.res.stringResource(R.string.app_tagline),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 color = AppTheme.colors.textSecondary

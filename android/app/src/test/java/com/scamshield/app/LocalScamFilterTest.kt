@@ -63,4 +63,30 @@ class LocalScamFilterTest {
         assertEquals("Remote Access Scam", result.category)
         assertTrue(result.riskScore >= 70)
     }
+
+    @Test
+    fun testPromptSafeMessage() {
+        val safe = "Hey, I'll call you at 5 PM."
+        val result = LocalScamFilter.evaluateLocally(safe)
+        assertTrue(result.isSafe)
+        assertEquals("SAFE", result.classification)
+        assertEquals(0, result.riskScore)
+    }
+
+    @Test
+    fun testPromptSuspiciousMessage() {
+        val suspicious = "Your delivery failed. Pay ₹50 using this link to reschedule your delivery."
+        val result = LocalScamFilter.evaluateLocally(suspicious)
+        assertTrue("Suspicious message should have risk > 25, got ${result.riskScore}", result.riskScore in 25..69)
+        assertEquals("SUSPICIOUS", result.classification)
+    }
+
+    @Test
+    fun testPromptHighRiskMessage() {
+        val highRisk = "Your bank account will be blocked today. Verify your KYC immediately using this link."
+        val result = LocalScamFilter.evaluateLocally(highRisk)
+        assertFalse(result.isSafe)
+        assertTrue("High risk score must be >= 70, got ${result.riskScore}", result.riskScore >= 70)
+        assertEquals("SCAM", result.classification)
+    }
 }

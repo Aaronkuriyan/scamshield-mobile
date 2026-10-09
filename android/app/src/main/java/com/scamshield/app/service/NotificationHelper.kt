@@ -50,14 +50,16 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val locCategory = com.scamshield.app.util.LocalizationHelper.getLocalizedCategory(context, record.category)
+        val locRec = com.scamshield.app.util.LocalizationHelper.getLocalizedRecommendation(context, record.recommendation, record.category, record.classification)
         val title = "⚠️ SCAM ALERT (${record.riskScore}/100)"
-        val content = "${record.category}: ${record.recommendation}"
+        val content = "$locCategory: $locRec"
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
             .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle().bigText("${record.category}\n\n${record.recommendation}\n\nIndicators:\n${record.indicatorsCsv}"))
+            .setStyle(NotificationCompat.BigTextStyle().bigText("$locCategory\n\n$locRec"))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setColor(0xEF4444)

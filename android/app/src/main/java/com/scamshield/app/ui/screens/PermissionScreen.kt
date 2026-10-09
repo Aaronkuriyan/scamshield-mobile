@@ -105,7 +105,7 @@ fun PermissionScreen(navController: NavController) {
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "How it works:",
+                                text = stringResource(R.string.permission_how_it_works_title),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = AppTheme.colors.textPrimary
@@ -113,7 +113,7 @@ fun PermissionScreen(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "1. When a message notification arrives, SCAMSHIELD inspects it.\n\n2. If it tries to steal your OTP, money, or passwords, an alert sounds immediately.\n\n3. You are warned before you click any dangerous link.",
+                            text = stringResource(R.string.permission_how_it_works_desc),
                             fontSize = 15.sp,
                             color = AppTheme.colors.textPrimary,
                             lineHeight = 23.sp

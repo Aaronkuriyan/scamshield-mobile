@@ -50,6 +50,8 @@ object LocaleHelper {
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
         config.setLayoutDirection(locale)
+        @Suppress("DEPRECATION")
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
         return context.createConfigurationContext(config)
     }
 }

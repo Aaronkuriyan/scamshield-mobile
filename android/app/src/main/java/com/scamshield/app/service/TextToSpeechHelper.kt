@@ -16,14 +16,20 @@ class TextToSpeechHelper(private val context: Context) : TextToSpeech.OnInitList
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val result = tts?.setLanguage(Locale.ENGLISH)
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.w("TTS", "English language not supported on this TTS engine.")
-            } else {
-                isInitialized = true
-                tts?.setSpeechRate(0.9f) // Slightly slower rate for elderly clarity
-                tts?.setPitch(1.0f)
+            val langCode = com.scamshield.app.util.LocaleHelper.getLanguage(context)
+            val locale = when (langCode) {
+                "kn" -> Locale("kn", "IN")
+                "hi" -> Locale("hi", "IN")
+                else -> Locale.ENGLISH
             }
+            val result = tts?.setLanguage(locale)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.w("TTS", "Language $locale not fully supported on this TTS engine, falling back to default.")
+                tts?.setLanguage(Locale.ENGLISH)
+            }
+            isInitialized = true
+            tts?.setSpeechRate(0.9f) // Slightly slower rate for elderly clarity
+            tts?.setPitch(1.0f)
         } else {
             Log.e("TTS", "TextToSpeech initialization failed.")
         }
@@ -33,7 +39,11 @@ class TextToSpeechHelper(private val context: Context) : TextToSpeech.OnInitList
         if (!isVoiceAlertEnabled(context)) return
 
         if (isInitialized && tts != null) {
-            val spokenMessage = "Warning. This message may be a scam. $warningText"
+            val spokenMessage = when (com.scamshield.app.util.LocaleHelper.getLanguage(context)) {
+                "kn" -> "ಎಚ್ಚರಿಕೆ! $warningText"
+                "hi" -> "सावधान! $warningText"
+                else -> "Warning. This message may be a scam. $warningText"
+            }
             tts?.speak(spokenMessage, TextToSpeech.QUEUE_FLUSH, null, "scamshield_voice_alert")
         }
     }
